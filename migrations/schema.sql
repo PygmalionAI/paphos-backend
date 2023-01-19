@@ -26,16 +26,16 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.characters (
     id uuid NOT NULL,
-    name character varying(255) NOT NULL,
-    description character varying(255) NOT NULL,
-    avatar_id character varying(255),
-    greeting character varying(255) NOT NULL,
-    persona character varying(255) NOT NULL,
-    example_chats character varying(255),
-    visibility character varying(255) NOT NULL,
+    name text NOT NULL,
+    description text NOT NULL,
+    avatar_id text,
+    greeting text NOT NULL,
+    persona text NOT NULL,
+    example_chats text,
+    visibility text NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    world_scenario character varying(255)
+    world_scenario text
 );
 
 
