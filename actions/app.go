@@ -1,6 +1,8 @@
 package actions
 
 import (
+	"errors"
+	"net/http"
 	"sync"
 
 	"paphos/locales"
@@ -52,6 +54,20 @@ func App() *buffalo.App {
 			SessionName: "_paphos_session",
 		})
 
+		// By default, Buffallo returns HTTP 500 with text "EOF" when a client sends
+		// a bad payload. That's not _our_ fault though, so we'll replace that with
+		// a 400 so our logs actually reflect that there was nothing wrong on our
+		// side.
+		var originalError500Handler = app.ErrorHandlers[500]
+		app.ErrorHandlers[http.StatusInternalServerError] = func(status int, err error, c buffalo.Context) error {
+			if err.Error() == "EOF" {
+				status = http.StatusBadRequest
+				err = c.Error(http.StatusBadRequest, errors.New("Malformed request payload"))
+			}
+
+			return originalError500Handler(status, err, c)
+		}
+
 		// Automatically redirect to SSL
 		app.Use(forceSSL())
 
@@ -66,6 +82,7 @@ func App() *buffalo.App {
 		// Remove to disable this.
 		app.Use(popmw.Transaction(models.DB))
 		app.GET("/", HomeHandler)
+		app.Resource("/characters", CharactersResource{})
 	})
 
 	return app
