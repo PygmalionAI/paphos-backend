@@ -1,39 +1,37 @@
-# Welcome to Buffalo
+# paphos-backend
 
-Thank you for choosing Buffalo for your web development needs.
+This is the backend for the official Pygmalion service.
 
-## Database Setup
+Very early work-in-progress, not usable in any capacity.
 
-It looks like you chose to set up your application using a database! Fantastic!
+## Contributing
 
-The first thing you need to do is open up the "database.yml" file and edit it to use the correct usernames, passwords, hosts, etc... that are appropriate for your environment.
+If you wish to contribute, this section contains some relevant information.
 
-You will also need to make sure that **you** start/install the database of your choice. Buffalo **won't** install and start it for you.
+The stack is:
 
-### Create Your Databases
+- [Golang](https://go.dev/) as the language of choice
+- [Buffalo](https://gobuffalo.io/) as the web framework
+- [PostgreSQL](https://www.postgresql.org/) as the main database
 
-Ok, so you've edited the "database.yml" file and started your database, now Buffalo can create the databases in that file for you:
+To get started, you need all of the above installed and functional on your machine.
 
-```console
-buffalo pop create -a
+For development, the [default configuration](./database.yml) expects a `paphos` user with password `paphos` to be available. You can then create the databases manually, or use `buffalo pop create -a`.
+
+With PostgreSQL up and running and the development database created, you can apply the migrations:
+
+```bash
+$ buffalo pop migrate
 ```
 
-## Starting the Application
+And then boot up the development server:
 
-Buffalo ships with a command that will watch your application and automatically rebuild the Go binary and any assets for you. To do that run the "buffalo dev" command:
-
-```console
-buffalo dev
+```bash
+$ PORT=3000 buffalo dev
 ```
 
-If you point your browser to [http://127.0.0.1:3000](http://127.0.0.1:3000) you should see a "Welcome to Buffalo!" page.
+The API should then be reachable at http://localhost:3000/.
 
-**Congratulations!** You now have your Buffalo application up and running.
+### Useful links
 
-## What Next?
-
-We recommend you heading over to [http://gobuffalo.io](http://gobuffalo.io) and reviewing all of the great documentation there.
-
-Good luck!
-
-[Powered by Buffalo](http://gobuffalo.io)
+- [fizz](https://github.com/gobuffalo/fizz/blob/main/README.md)'s documentation (migration DSL)
