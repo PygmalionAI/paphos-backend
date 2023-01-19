@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/gobuffalo/nulls"
 	"github.com/gobuffalo/pop/v6"
 	"github.com/gobuffalo/validate/v3"
 	"github.com/gobuffalo/validate/v3/validators"
@@ -12,16 +13,19 @@ import (
 
 // Character is used by pop to map your characters database table to your go code.
 type Character struct {
-	ID           uuid.UUID `json:"id" db:"id"`
-	Name         string    `json:"name" db:"name"`
-	Description  string    `json:"description" db:"description"`
-	AvatarID     string    `json:"avatar_id" db:"avatar_id"`
-	Greeting     string    `json:"greeting" db:"greeting"`
-	Persona      string    `json:"persona" db:"persona"`
-	ExampleChats string    `json:"example_chats" db:"example_chats"`
-	Visibility   string    `json:"visibility" db:"visibility"`
-	CreatedAt    time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at" db:"updated_at"`
+	ID uuid.UUID `json:"id" db:"id"`
+
+	Name          string       `json:"name" db:"name"`
+	Description   string       `json:"description" db:"description"`
+	AvatarID      nulls.String `json:"avatar_id" db:"avatar_id"`
+	Greeting      string       `json:"greeting" db:"greeting"`
+	Persona       string       `json:"persona" db:"persona"`
+	WorldScenario nulls.String `json:"world_scenario" db:"world_scenario"`
+	ExampleChats  nulls.String `json:"example_chats" db:"example_chats"`
+	Visibility    string       `json:"visibility" db:"visibility"`
+
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }
 
 // String is not required by pop and may be deleted
@@ -42,14 +46,27 @@ func (c Characters) String() string {
 // Validate gets run every time you call a "pop.Validate*" (pop.ValidateAndSave, pop.ValidateAndCreate, pop.ValidateAndUpdate) method.
 // This method is not required and may be deleted.
 func (c *Character) Validate(tx *pop.Connection) (*validate.Errors, error) {
+	// TODO(11b): All these hardcoded values might be better off at the top of the
+	// file, or being defined somewhere else entirely.
+	VALID_VISIBILITY_VALUES := []string{"public", "unlisted", "private"}
+
 	return validate.Validate(
 		&validators.StringIsPresent{Field: c.Name, Name: "Name"},
+		&validators.StringLengthInRange{Field: c.Name, Name: "Name", Min: 1, Max: 32},
+
 		&validators.StringIsPresent{Field: c.Description, Name: "Description"},
-		&validators.StringIsPresent{Field: c.AvatarID, Name: "AvatarID"},
+		&validators.StringLengthInRange{Field: c.Description, Name: "Description", Min: 12, Max: 64},
+
 		&validators.StringIsPresent{Field: c.Greeting, Name: "Greeting"},
+		&validators.StringLengthInRange{Field: c.Greeting, Name: "Greeting", Min: 2, Max: 1024},
+
 		&validators.StringIsPresent{Field: c.Persona, Name: "Persona"},
-		&validators.StringIsPresent{Field: c.ExampleChats, Name: "ExampleChats"},
-		&validators.StringIsPresent{Field: c.Visibility, Name: "Visibility"},
+		&validators.StringLengthInRange{Field: c.Persona, Name: "Persona", Min: 12, Max: 1024},
+
+		&validators.StringLengthInRange{Field: c.WorldScenario.String, Name: "Scenario", Min: 0, Max: 1024},
+		&validators.StringLengthInRange{Field: c.ExampleChats.String, Name: "Example chats", Min: 0, Max: 1024},
+
+		&validators.StringInclusion{Field: c.Visibility, Name: "Visibility", List: VALID_VISIBILITY_VALUES},
 	), nil
 }
 

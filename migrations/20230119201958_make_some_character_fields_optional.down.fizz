@@ -1,0 +1,2 @@
+change_column("characters", "avatar_id", "string", {null: false})
+change_column("characters", "example_chats", "string", {null: false})

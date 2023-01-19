@@ -28,13 +28,14 @@ CREATE TABLE public.characters (
     id uuid NOT NULL,
     name character varying(255) NOT NULL,
     description character varying(255) NOT NULL,
-    avatar_id character varying(255) NOT NULL,
+    avatar_id character varying(255),
     greeting character varying(255) NOT NULL,
     persona character varying(255) NOT NULL,
-    example_chats character varying(255) NOT NULL,
+    example_chats character varying(255),
     visibility character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    world_scenario character varying(255)
 );
 
 
