@@ -2,13 +2,13 @@
 development:
   dialect: postgres
   database: paphos_development
-  user: postgres
-  password: postgres
+  user: paphos
+  password: paphos
   host: 127.0.0.1
   pool: 5
 
 test:
-  url: {{envOr "TEST_DATABASE_URL" "postgres://postgres:postgres@127.0.0.1:5432/paphos_test?sslmode=disable"}}
+  url: {{envOr "TEST_DATABASE_URL" "postgres://paphos:paphos@127.0.0.1:5432/paphos_test?sslmode=disable"}}
 
 production:
-  url: {{envOr "DATABASE_URL" "postgres://postgres:postgres@127.0.0.1:5432/paphos_production?sslmode=disable"}}
+  url: {{envOr "DATABASE_URL" "postgres://paphos:paphos@127.0.0.1:5432/paphos_production?sslmode=disable"}}
