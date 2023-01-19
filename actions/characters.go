@@ -6,7 +6,6 @@ import (
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v6"
-	"github.com/gobuffalo/x/responder"
 
 	"paphos/models"
 )
@@ -48,17 +47,7 @@ func (v CharactersResource) List(c buffalo.Context) error {
 		return err
 	}
 
-	return responder.Wants("html", func(c buffalo.Context) error {
-		// Add the paginator to the context so it can be used in the template.
-		c.Set("pagination", q.Paginator)
-
-		c.Set("characters", characters)
-		return c.Render(http.StatusOK, r.HTML("characters/index.plush.html"))
-	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(200, r.JSON(characters))
-	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(200, r.XML(characters))
-	}).Respond(c)
+	return c.Render(200, r.JSON(characters))
 }
 
 // Show gets the data for one Character. This function is mapped to
@@ -78,15 +67,7 @@ func (v CharactersResource) Show(c buffalo.Context) error {
 		return c.Error(http.StatusNotFound, err)
 	}
 
-	return responder.Wants("html", func(c buffalo.Context) error {
-		c.Set("character", character)
-
-		return c.Render(http.StatusOK, r.HTML("characters/show.plush.html"))
-	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(200, r.JSON(character))
-	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(200, r.XML(character))
-	}).Respond(c)
+	return c.Render(200, r.JSON(character))
 }
 
 // Create adds a Character to the DB. This function is mapped to the
@@ -113,33 +94,10 @@ func (v CharactersResource) Create(c buffalo.Context) error {
 	}
 
 	if verrs.HasAny() {
-		return responder.Wants("html", func(c buffalo.Context) error {
-			// Make the errors available inside the html template
-			c.Set("errors", verrs)
-
-			// Render again the new.html template that the user can
-			// correct the input.
-			c.Set("character", character)
-
-			return c.Render(http.StatusUnprocessableEntity, r.HTML("characters/new.plush.html"))
-		}).Wants("json", func(c buffalo.Context) error {
-			return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
-		}).Wants("xml", func(c buffalo.Context) error {
-			return c.Render(http.StatusUnprocessableEntity, r.XML(verrs))
-		}).Respond(c)
+		return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
 	}
 
-	return responder.Wants("html", func(c buffalo.Context) error {
-		// If there are no errors set a success message
-		c.Flash().Add("success", T.Translate(c, "character.created.success"))
-
-		// and redirect to the show page
-		return c.Redirect(http.StatusSeeOther, "/characters/%v", character.ID)
-	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(http.StatusCreated, r.JSON(character))
-	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(http.StatusCreated, r.XML(character))
-	}).Respond(c)
+	return c.Render(http.StatusCreated, r.JSON(character))
 }
 
 // Update changes a Character in the DB. This function is mapped to
@@ -169,33 +127,10 @@ func (v CharactersResource) Update(c buffalo.Context) error {
 	}
 
 	if verrs.HasAny() {
-		return responder.Wants("html", func(c buffalo.Context) error {
-			// Make the errors available inside the html template
-			c.Set("errors", verrs)
-
-			// Render again the edit.html template that the user can
-			// correct the input.
-			c.Set("character", character)
-
-			return c.Render(http.StatusUnprocessableEntity, r.HTML("characters/edit.plush.html"))
-		}).Wants("json", func(c buffalo.Context) error {
-			return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
-		}).Wants("xml", func(c buffalo.Context) error {
-			return c.Render(http.StatusUnprocessableEntity, r.XML(verrs))
-		}).Respond(c)
+		return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
 	}
 
-	return responder.Wants("html", func(c buffalo.Context) error {
-		// If there are no errors set a success message
-		c.Flash().Add("success", T.Translate(c, "character.updated.success"))
-
-		// and redirect to the show page
-		return c.Redirect(http.StatusSeeOther, "/characters/%v", character.ID)
-	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(http.StatusOK, r.JSON(character))
-	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(http.StatusOK, r.XML(character))
-	}).Respond(c)
+	return c.Render(http.StatusOK, r.JSON(character))
 }
 
 // Destroy deletes a Character from the DB. This function is mapped
@@ -219,15 +154,5 @@ func (v CharactersResource) Destroy(c buffalo.Context) error {
 		return err
 	}
 
-	return responder.Wants("html", func(c buffalo.Context) error {
-		// If there are no errors set a flash message
-		c.Flash().Add("success", T.Translate(c, "character.destroyed.success"))
-
-		// Redirect to the index page
-		return c.Redirect(http.StatusSeeOther, "/characters")
-	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(http.StatusOK, r.JSON(character))
-	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(http.StatusOK, r.XML(character))
-	}).Respond(c)
+	return c.Render(http.StatusOK, r.JSON(character))
 }
