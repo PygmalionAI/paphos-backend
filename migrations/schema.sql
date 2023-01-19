@@ -53,6 +53,26 @@ CREATE TABLE public.schema_migration (
 ALTER TABLE public.schema_migration OWNER TO paphos;
 
 --
+-- Name: users; Type: TABLE; Schema: public; Owner: paphos
+--
+
+CREATE TABLE public.users (
+    id uuid NOT NULL,
+    email text NOT NULL,
+    hashed_password text NOT NULL,
+    display_name text NOT NULL,
+    role text NOT NULL,
+    verification_token text,
+    password_reset_token text,
+    last_login timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO paphos;
+
+--
 -- Name: characters characters_pkey; Type: CONSTRAINT; Schema: public; Owner: paphos
 --
 
@@ -61,10 +81,25 @@ ALTER TABLE ONLY public.characters
 
 
 --
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: paphos
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migration_version_idx; Type: INDEX; Schema: public; Owner: paphos
 --
 
 CREATE UNIQUE INDEX schema_migration_version_idx ON public.schema_migration USING btree (version);
+
+
+--
+-- Name: users_email_idx; Type: INDEX; Schema: public; Owner: paphos
+--
+
+CREATE UNIQUE INDEX users_email_idx ON public.users USING btree (email);
 
 
 --

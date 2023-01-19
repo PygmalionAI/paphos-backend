@@ -1,0 +1,13 @@
+create_table("users") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("email", "text", {})
+	t.Column("hashed_password", "text", {})
+	t.Column("display_name", "text", {})
+	t.Column("role", "text", {})
+	t.Column("verification_token", "text", {null: true})
+	t.Column("password_reset_token", "text", {null: true})
+	t.Column("last_login", "timestamp", {null: true})
+	t.Timestamps()
+
+	t.Index("email", {"unique": true})
+}
