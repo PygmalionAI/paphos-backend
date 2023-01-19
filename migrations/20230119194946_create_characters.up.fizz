@@ -1,0 +1,11 @@
+create_table("characters") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("name", "string", {})
+	t.Column("description", "string", {})
+	t.Column("avatar_id", "string", {})
+	t.Column("greeting", "string", {})
+	t.Column("persona", "string", {})
+	t.Column("example_chats", "string", {})
+	t.Column("visibility", "string", {})
+	t.Timestamps()
+}
