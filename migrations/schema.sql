@@ -35,7 +35,8 @@ CREATE TABLE public.characters (
     visibility text NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    world_scenario text
+    world_scenario text,
+    creator_id uuid NOT NULL
 );
 
 
@@ -100,6 +101,14 @@ CREATE UNIQUE INDEX schema_migration_version_idx ON public.schema_migration USIN
 --
 
 CREATE UNIQUE INDEX users_email_idx ON public.users USING btree (email);
+
+
+--
+-- Name: characters characters_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: paphos
+--
+
+ALTER TABLE ONLY public.characters
+    ADD CONSTRAINT characters_users_id_fk FOREIGN KEY (creator_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --

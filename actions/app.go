@@ -7,6 +7,7 @@ import (
 
 	"paphos/locales"
 	"paphos/models"
+	"paphos/shared"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo-pop/v3/pop/popmw"
@@ -62,11 +63,14 @@ func App() *buffalo.App {
 		app.ErrorHandlers[http.StatusInternalServerError] = func(status int, err error, c buffalo.Context) error {
 			if err.Error() == "EOF" {
 				status = http.StatusBadRequest
-				err = c.Error(http.StatusBadRequest, errors.New("Malformed request payload"))
+				err = c.Error(http.StatusBadRequest, errors.New("malformed request payload"))
 			}
 
 			return originalError500Handler(status, err, c)
 		}
+		// TODO(11b): related to the above ^
+		// Marshalling failures result in a 500 even though they're the user's fault
+		// most of the time (e.g. sent in an int instead of a string), fix that.
 
 		// Automatically redirect to SSL
 		app.Use(forceSSL())
@@ -81,9 +85,17 @@ func App() *buffalo.App {
 		//   c.Value("tx").(*pop.Connection)
 		// Remove to disable this.
 		app.Use(popmw.Transaction(models.DB))
-		app.GET("/", HomeHandler)
-		app.Resource("/characters", CharactersResource{})
-		app.Resource("/users", UsersResource{})
+
+		apiV1Group := app.Group("/api/v1")
+		userGroup := apiV1Group.Group("/users")
+		userGroup.POST("/register", UsersRegisterPost)
+		userGroup.POST("/login", UsersLoginPost)
+
+		apiV1Group.Use(shared.ExtractDataFromJWTMiddleware)
+
+		apiV1Group.Resource("/characters", CharactersResource{})
+
+		userGroup.GET("/{user_id}", UsersShowGet)
 	})
 
 	return app

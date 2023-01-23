@@ -24,6 +24,9 @@ type Character struct {
 	ExampleChats  nulls.String `json:"example_chats" db:"example_chats"`
 	Visibility    string       `json:"visibility" db:"visibility"`
 
+	Creator   User      `json:"-" belongs_to:"user"`
+	CreatorID uuid.UUID `json:"-" db:"creator_id"`
+
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }
@@ -41,6 +44,15 @@ type Characters []Character
 func (c Characters) String() string {
 	jc, _ := json.Marshal(c)
 	return string(jc)
+}
+
+// CharactersVisibleToUser defines a scope to return only Characters that are visible to
+// the user with the given UUID.
+func CharactersVisibleToUser(userUuid uuid.UUID) pop.ScopeFunc {
+	return func(q *pop.Query) *pop.Query {
+		q = q.Where("visibility = 'public' OR creator_id = ?", userUuid)
+		return q
+	}
 }
 
 // Validate gets run every time you call a "pop.Validate*" (pop.ValidateAndSave, pop.ValidateAndCreate, pop.ValidateAndUpdate) method.

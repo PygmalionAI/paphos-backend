@@ -1,0 +1,5 @@
+add_column("characters", "creator_id", "uuid")
+add_foreign_key("characters", "creator_id", {"users": ["id"]}, {
+  "on_delete": "RESTRICT",
+  "on_update": "CASCADE",
+})

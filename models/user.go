@@ -23,6 +23,8 @@ type User struct {
 	DisplayName    string `json:"display_name" db:"display_name"`
 	Role           string `json:"role" db:"role"`
 
+	Characters Characters `has_many:"characters"`
+
 	VerificationToken  nulls.String `json:"-" db:"verification_token"`
 	PasswordResetToken nulls.String `json:"-" db:"password_reset_token"`
 
@@ -33,6 +35,21 @@ type User struct {
 	LastLogin nulls.Time `json:"last_login" db:"last_login"`
 	CreatedAt time.Time  `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at" db:"updated_at"`
+}
+
+// UserFromJWT is the user information contained within the JWT claim.
+type UserFromJWT struct {
+	ID          uuid.UUID `json:"id"`
+	Email       string    `json:"email"`
+	DisplayName string    `json:"display_name"`
+}
+
+// Marshals only the public fields from a UserFromJWT instance.
+func (u *UserFromJWT) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		ID          uuid.UUID `json:"id"`
+		DisplayName string    `json:"display_name"`
+	}{u.ID, u.DisplayName})
 }
 
 // Marshals a User struct but only going over the public fields.

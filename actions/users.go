@@ -79,10 +79,9 @@ func UsersLoginPost(c buffalo.Context) error {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":           populated_user.ID,
-		"email":        populated_user.Email,
-		"display_name": populated_user.DisplayName,
-
+		"user": models.UserFromJWT{
+			populated_user.ID, populated_user.Email, populated_user.DisplayName,
+		},
 		"iat": jwt.NewNumericDate(time.Now()),
 		"exp": jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 	})
