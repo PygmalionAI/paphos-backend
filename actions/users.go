@@ -71,7 +71,7 @@ func UsersLoginPost(c buffalo.Context) error {
 		return fmt.Errorf("no transaction found")
 	}
 
-	err, populated_user := user.Authorize(tx)
+	populated_user, err := user.Authorize(tx)
 	if err != nil {
 		verrs := validate.NewErrors()
 		verrs.Add("root", "Invalid email or password.")

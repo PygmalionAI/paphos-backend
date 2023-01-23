@@ -81,19 +81,19 @@ type EmailNotTaken struct {
 }
 
 // Checks user's password for logging in.
-func (u *User) Authorize(tx *pop.Connection) (error, *User) {
+func (u *User) Authorize(tx *pop.Connection) (*User, error) {
 	err := tx.Select("id", "display_name", "hashed_password").Where("email = ?", strings.ToLower(u.Email)).First(u)
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 
 	// Confirm that the given password matches the hashed password from the DB.
 	err = bcrypt.CompareHashAndPassword([]byte(u.HashedPassword), []byte(u.Password))
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 
-	return nil, u
+	return u, nil
 }
 
 // IsValid performs the validation check for unique emails
