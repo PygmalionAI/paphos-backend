@@ -2,7 +2,7 @@
 
 This is the backend for the official Pygmalion service.
 
-Very early work-in-progress, not usable in any capacity.
+Very early work-in-progress, not usable in any capacity. Also my first time writing Go, so very likely non-idiomatic.
 
 ## Contributing
 
