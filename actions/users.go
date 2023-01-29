@@ -29,7 +29,7 @@ import (
 	return c.Render(200, r.JSON(user))
 } */
 
-// Registers a new User.
+// UsersRegisterPost registers a new User.
 func UsersRegisterPost(c buffalo.Context) error {
 	// Allocate an empty User
 	user := &models.User{}
@@ -58,7 +58,7 @@ func UsersRegisterPost(c buffalo.Context) error {
 	return c.Render(http.StatusCreated, r.JSON(user))
 }
 
-// Logs a user in.
+// UsersLoginPost logs a user in by returning a session JWT.
 func UsersLoginPost(c buffalo.Context) error {
 	user := &models.User{}
 
