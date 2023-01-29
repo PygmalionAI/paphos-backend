@@ -54,13 +54,13 @@ func (u *UserFromJWT) MarshalJSON() ([]byte, error) {
 
 // Marshals a User struct but only going over the public fields.
 // https://stackoverflow.com/a/31374980
-func (u *User) MarshalJSON() ([]byte, error) {
+/* func (u *User) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		ID          uuid.UUID `json:"id"`
 		Email       string    `json:"email"`
 		DisplayName string    `json:"display_name"`
 	}{u.ID, u.Email, u.DisplayName})
-}
+} */
 
 // String is not required by pop and may be deleted
 func (u User) String() string {
