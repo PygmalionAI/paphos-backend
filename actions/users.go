@@ -75,7 +75,7 @@ func UsersLoginPost(c buffalo.Context) error {
 	if err != nil {
 		verrs := validate.NewErrors()
 		verrs.Add("root", "Invalid email or password.")
-		return c.Error(http.StatusForbidden, verrs)
+		return c.Error(http.StatusUnauthorized, verrs)
 	}
 
 	tokenString, err := shared.CreateSignedJWTStringForUser(populated_user)
