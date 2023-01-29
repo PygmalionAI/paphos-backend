@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"paphos/models"
 	"strings"
+	"time"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gofrs/uuid"
@@ -52,4 +54,19 @@ func ExtractUserUUIDFromContext(c buffalo.Context) (uuid.UUID, error) {
 	userFromClaims := claims["user"].(map[string]interface{})
 	userUuidString := userFromClaims["id"].(string)
 	return uuid.FromString(userUuidString)
+}
+
+// CreateSignedJWTStringForUser creates a signed session JWT for the given user.
+func CreateSignedJWTStringForUser(u *models.User) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user": models.UserFromJWT{
+			ID:          u.ID,
+			Email:       u.Email,
+			DisplayName: u.DisplayName,
+		},
+		"iat": jwt.NewNumericDate(time.Now()),
+		"exp": jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+	})
+
+	return token.SignedString(JWT_SECRET)
 }

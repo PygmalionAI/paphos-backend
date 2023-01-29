@@ -3,13 +3,11 @@ package actions
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v6"
 	"github.com/gobuffalo/validate/v3"
 	"github.com/gofrs/uuid"
-	"github.com/golang-jwt/jwt/v4"
 
 	"paphos/models"
 	"paphos/shared"
@@ -80,15 +78,7 @@ func UsersLoginPost(c buffalo.Context) error {
 		return c.Error(http.StatusForbidden, verrs)
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user": models.UserFromJWT{
-			populated_user.ID, populated_user.Email, populated_user.DisplayName,
-		},
-		"iat": jwt.NewNumericDate(time.Now()),
-		"exp": jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
-	})
-
-	tokenString, err := token.SignedString(shared.JWT_SECRET)
+	tokenString, err := shared.CreateSignedJWTStringForUser(populated_user)
 	if err != nil {
 		return err
 	}
