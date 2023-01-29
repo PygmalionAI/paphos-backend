@@ -15,7 +15,9 @@ import (
 	"paphos/shared"
 )
 
-func UsersShowGet(c buffalo.Context) error {
+// Commented out for now to avoid data leakage. Adjust when we actually need
+// this data in the front-end.
+/* func UsersShowGet(c buffalo.Context) error {
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return fmt.Errorf("no transaction found")
@@ -27,7 +29,7 @@ func UsersShowGet(c buffalo.Context) error {
 	}
 
 	return c.Render(200, r.JSON(user))
-}
+} */
 
 // Registers a new User.
 func UsersRegisterPost(c buffalo.Context) error {

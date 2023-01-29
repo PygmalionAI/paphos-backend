@@ -95,7 +95,9 @@ func App() *buffalo.App {
 
 		apiV1Group.Resource("/characters", CharactersResource{})
 
-		userGroup.GET("/{user_id}", UsersShowGet)
+		// Disabled for now since we don't need this in the front-end yet and it
+		// leaks user emails.
+		// userGroup.GET("/{user_id}", UsersShowGet)
 	})
 
 	return app
