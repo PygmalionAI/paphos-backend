@@ -157,6 +157,9 @@ func (v CharactersResource) Update(c buffalo.Context) error {
 	return c.Render(http.StatusOK, r.JSON(character))
 }
 
+// TODO(11b): Implement in the near future. Take care to send a good error
+// message when deletion fails due to foreign key constraints.
+/*
 // Destroy deletes a Character from the DB. This function is mapped
 // to the path DELETE /characters/{character_id}
 func (v CharactersResource) Destroy(c buffalo.Context) error {
@@ -180,3 +183,4 @@ func (v CharactersResource) Destroy(c buffalo.Context) error {
 
 	return c.Render(http.StatusOK, r.JSON(character))
 }
+*/
