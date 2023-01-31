@@ -140,6 +140,15 @@ func (v CharactersResource) Update(c buffalo.Context) error {
 		return c.Error(http.StatusNotFound, err)
 	}
 
+	userUuid, err := shared.ExtractUserUUIDFromContext(c)
+	if err != nil {
+		return err
+	}
+
+	if character.CreatorID != userUuid {
+		return c.Error(http.StatusForbidden, fmt.Errorf("forbidden"))
+	}
+
 	// Bind Character to the html form elements
 	if err := c.Bind(character); err != nil {
 		return err
