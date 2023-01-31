@@ -1,7 +1,6 @@
 package models
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/gobuffalo/nulls"
@@ -10,6 +9,10 @@ import (
 	"github.com/gobuffalo/validate/v3/validators"
 	"github.com/gofrs/uuid"
 )
+
+//
+// Database model
+//
 
 // Character is used by pop to map your characters database table to your go code.
 type Character struct {
@@ -23,6 +26,7 @@ type Character struct {
 	WorldScenario nulls.String `json:"world_scenario" db:"world_scenario"`
 	ExampleChats  nulls.String `json:"example_chats" db:"example_chats"`
 	Visibility    string       `json:"visibility" db:"visibility"`
+	// IsNSFW        bool         `json:"nsfw" db:"nsfw"`
 
 	Creator   User      `json:"-" belongs_to:"user"`
 	CreatorID uuid.UUID `json:"-" db:"creator_id"`
@@ -31,20 +35,25 @@ type Character struct {
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }
 
-// String is not required by pop and may be deleted
-func (c Character) String() string {
-	jc, _ := json.Marshal(c)
-	return string(jc)
-}
-
-// Characters is not required by pop and may be deleted
 type Characters []Character
 
-// String is not required by pop and may be deleted
-func (c Characters) String() string {
-	jc, _ := json.Marshal(c)
-	return string(jc)
+//
+// View "models"
+//
+
+// FieldsForCharacterList contains the list of fields that should be used
+// in the SQL SELECT query used on the List action for the Character resource.
+var FieldsForCharacterList = []string{
+	"id",
+	"name",
+	"description",
+	"avatar_id",
+	"visibility",
 }
+
+//
+// Scopes
+//
 
 // CharactersVisibleToUser defines a scope to return only Characters that are visible to
 // the user with the given UUID.
@@ -54,6 +63,10 @@ func CharactersVisibleToUser(userUuid uuid.UUID) pop.ScopeFunc {
 		return q
 	}
 }
+
+//
+// Validations
+//
 
 // Validate gets run every time you call a "pop.Validate*" (pop.ValidateAndSave, pop.ValidateAndCreate, pop.ValidateAndUpdate) method.
 // This method is not required and may be deleted.
