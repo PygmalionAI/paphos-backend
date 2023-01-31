@@ -49,7 +49,10 @@ func (v CharactersResource) List(c buffalo.Context) error {
 		return err
 	}
 
-	if err := q.Scope(models.CharactersVisibleToUser(userUuid)).All(characters); err != nil {
+	if err := q.
+		Scope(models.CharactersVisibleToUser(userUuid)).
+		Select(models.FieldsForCharacterList...).
+		All(characters); err != nil {
 		return err
 	}
 
@@ -74,10 +77,10 @@ func (v CharactersResource) Show(c buffalo.Context) error {
 		return err
 	}
 
-	// FIXME: leaking data
-	// if err := tx.Scope(models.CharactersVisibleToUser(userUuid)).Find(character, c.Param("character_id")); err != nil {
-	if err := tx.Scope(models.CharactersVisibleToUser(userUuid)).Where("id = ?", c.Param("character_id")).First(character); err != nil {
-		return c.Error(http.StatusNotFound, err)
+	// FIXME(11b): This makes it so unlisted characters can't be used. Need to
+	// break this into two separate scopes.
+	if err := tx.Where("id = ?", c.Param("character_id")).Scope(models.CharactersVisibleToUser(userUuid)).First(character); err != nil {
+		return c.Error(http.StatusNotFound, fmt.Errorf("character not found"))
 	}
 
 	return c.Render(200, r.JSON(character))

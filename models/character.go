@@ -50,7 +50,7 @@ func (c Characters) String() string {
 // the user with the given UUID.
 func CharactersVisibleToUser(userUuid uuid.UUID) pop.ScopeFunc {
 	return func(q *pop.Query) *pop.Query {
-		q = q.Where("visibility = 'public' OR creator_id = ?", userUuid)
+		q = q.Where("(visibility = 'public' OR creator_id = ?)", userUuid)
 		return q
 	}
 }
