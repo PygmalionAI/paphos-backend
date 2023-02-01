@@ -36,7 +36,8 @@ CREATE TABLE public.characters (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     world_scenario text,
-    creator_id uuid NOT NULL
+    creator_id uuid NOT NULL,
+    contentious boolean NOT NULL
 );
 
 
@@ -87,6 +88,13 @@ ALTER TABLE ONLY public.characters
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: characters_contentious_idx; Type: INDEX; Schema: public; Owner: paphos
+--
+
+CREATE INDEX characters_contentious_idx ON public.characters USING btree (contentious);
 
 
 --

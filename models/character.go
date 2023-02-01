@@ -26,7 +26,7 @@ type Character struct {
 	WorldScenario nulls.String `json:"world_scenario" db:"world_scenario"`
 	ExampleChats  nulls.String `json:"example_chats" db:"example_chats"`
 	Visibility    string       `json:"visibility" db:"visibility"`
-	// IsNSFW        bool         `json:"nsfw" db:"nsfw"`
+	IsContentious bool         `json:"contentious" db:"contentious"`
 
 	Creator   User      `json:"-" belongs_to:"user"`
 	CreatorID uuid.UUID `json:"-" db:"creator_id"`
