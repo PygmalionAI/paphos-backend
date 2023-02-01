@@ -55,7 +55,11 @@ func UsersRegisterPost(c buffalo.Context) error {
 		return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
 	}
 
-	return c.Render(http.StatusCreated, r.JSON(user))
+	return c.Render(http.StatusCreated, r.JSON(struct {
+		ID          uuid.UUID `json:"id"`
+		Email       string    `json:"email"`
+		DisplayName string    `json:"display_name"`
+	}{user.ID, user.Email, user.DisplayName}))
 }
 
 // UsersLoginPost logs a user in by returning a session JWT.
