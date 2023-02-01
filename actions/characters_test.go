@@ -74,7 +74,8 @@ func (as *ActionSuite) Test_CharactersResource_Show_WhenLoggedOut() {
 	as.Equal(http.StatusUnauthorized, res.Code)
 }
 
-// Test_CharactersResource_Show_WhenPrivate asserts that ...
+// Test_CharactersResource_Show_WhenPrivate asserts that private Characters are
+// only accessible to its creator.
 func (as *ActionSuite) Test_CharactersResource_Show_WhenPrivate() {
 	as.LoadFixture("default")
 
@@ -91,8 +92,8 @@ func (as *ActionSuite) Test_CharactersResource_Show_WhenPrivate() {
 	as.Equal(http.StatusOK, otherRes.Code)
 }
 
-// Test_CharactersResource_Create_WhenLoggedOut asserts that the Create action is
-// gated behind authentication.
+// Test_CharactersResource_Create_WhenLoggedOut asserts that the Create action
+// is gated behind authentication.
 func (as *ActionSuite) Test_CharactersResource_Create_WhenLoggedOut() {
 	as.LoadFixture("default")
 
@@ -102,7 +103,7 @@ func (as *ActionSuite) Test_CharactersResource_Create_WhenLoggedOut() {
 	as.Equal(http.StatusUnauthorized, res.Code)
 }
 
-// Test_CharactersResource_Create asserts that the Create action is successfully
+// Test_CharactersResource_Create asserts that the Create action successfully
 // creates a Character.
 func (as *ActionSuite) Test_CharactersResource_Create() {
 	as.LoadFixture("default")
