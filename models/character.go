@@ -55,11 +55,20 @@ var FieldsForCharacterList = []string{
 // Scopes
 //
 
-// CharactersVisibleToUser defines a scope to return only Characters that are visible to
-// the user with the given UUID.
+// CharactersVisibleToUser defines a scope to return only Characters that are
+// visible to the user with the given UUID.
 func CharactersVisibleToUser(userUuid uuid.UUID) pop.ScopeFunc {
 	return func(q *pop.Query) *pop.Query {
 		q = q.Where("(visibility = 'public' OR creator_id = ?)", userUuid)
+		return q
+	}
+}
+
+// CharactersAccessibleByUser defines a scope to return only Characters that are
+// accessible by user with the given UUID.
+func CharactersAccessibleByUser(userUuid uuid.UUID) pop.ScopeFunc {
+	return func(q *pop.Query) *pop.Query {
+		q = q.Where("(visibility = 'public' OR visibility = 'unlisted' OR creator_id = ?)", userUuid)
 		return q
 	}
 }

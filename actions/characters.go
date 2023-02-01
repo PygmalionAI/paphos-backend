@@ -77,9 +77,10 @@ func (v CharactersResource) Show(c buffalo.Context) error {
 		return err
 	}
 
-	// FIXME(11b): This makes it so unlisted characters can't be used. Need to
-	// break this into two separate scopes.
-	if err := tx.Where("id = ?", c.Param("character_id")).Scope(models.CharactersVisibleToUser(userUuid)).First(character); err != nil {
+	query := tx.
+		Where("id = ?", c.Param("character_id")).
+		Scope(models.CharactersAccessibleByUser(userUuid))
+	if err := query.First(character); err != nil {
 		return c.Error(http.StatusNotFound, fmt.Errorf("character not found"))
 	}
 

@@ -62,3 +62,16 @@ name = "default"
 
       created_at = "<%= now() %>"
       updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "<%= uuid() %>"
+      name = "Unlisted Character"
+      description = "This is an example unlisted character created by normal_user_2."
+      greeting = "Yo! I'm an unlisted character."
+      persona = "An example character marked as unlisted."
+      visibility = "unlisted"
+
+      creator_id = "<%= uuidNamed("normal_user_2") %>"
+
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"

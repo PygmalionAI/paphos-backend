@@ -92,6 +92,23 @@ func (as *ActionSuite) Test_CharactersResource_Show_WhenPrivate() {
 	as.Equal(http.StatusOK, otherRes.Code)
 }
 
+// Test_CharactersResource_Show_WhenUnlisted asserts that unlisted Characters are
+// accessible to anyone using its UUID.
+func (as *ActionSuite) Test_CharactersResource_Show_WhenUnlisted() {
+	as.LoadFixture("default")
+
+	character := &models.Character{}
+	err := as.DB.Select("id").Where("visibility = 'unlisted'").First(character)
+	as.NoError(err)
+	endpoint := "/api/v1/characters/" + character.ID.String()
+
+	// Fixture coupling: this User must _not_ be the one who created the unlisted
+	// Character.
+	res := as.JSONAsUser("user@example.com", endpoint).Get()
+
+	as.Equal(http.StatusOK, res.Code)
+}
+
 // Test_CharactersResource_Create_WhenLoggedOut asserts that the Create action
 // is gated behind authentication.
 func (as *ActionSuite) Test_CharactersResource_Create_WhenLoggedOut() {
