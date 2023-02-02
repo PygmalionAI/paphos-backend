@@ -68,10 +68,5 @@ jobs:
       - name: Buffalo Build
         run: buffalo build
 
-      - name: Buffalo Tests
+      - name: Buffalo Tests / Coverage
         run: buffalo test -coverprofile=c.out ./...
-
-      - name: Coverage Report
-        # Always run. Including if the previous 'tests' step fails
-        if: success() || failure()
-        run: ls
