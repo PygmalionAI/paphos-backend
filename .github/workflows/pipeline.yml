@@ -13,13 +13,28 @@ env:
   buffalo-cli-version: '0.18.13'
 
 jobs:
+  postgres:
+    name: PostgreSQL
+    runs-on: ubuntu-latest
+    container: node:10.18-jessie
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: paphos
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
   dependencies:
     name: Install Dependencies
     runs-on: ubuntu-latest
-
-    container: node:10.18-jessie
-
-
 
     steps:
       - name: Checkout Repo
@@ -46,4 +61,5 @@ jobs:
         run: buffalo version
       
       - name: Buffalo Pop - Create Database
+        needs: postgres
         run: buffalo pop create -a
