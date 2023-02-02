@@ -26,7 +26,6 @@ jobs:
         env:
           POSTGRES_USER: paphos
           POSTGRES_PASSWORD: paphos
-          POSTGRES_DB: paphos_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -40,25 +39,9 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Install Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{  env.go-version  }}
-        
-      - name: Install Buffalo
-        run: |
-          wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
-          tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
-          sudo mv buffalo /usr/local/bin/buffalo
-          
-      - name: Install Buffalo pop plugin
-        run: buffalo plugins install
+      - run: |
+          apt-get update
+          apt-get install --yes --no-install-recommends postgresql-client
 
-      - name: Go Version
-        run: go version
-
-      - name: Buffalo Version
-        run: buffalo version
-      
-      - name: Buffalo Pop - Create Database
-        run: buffalo pop create -a
+      - run: |
+        psql -h localhost -U paphos -c 'CREATE DATABASE ...'
