@@ -64,3 +64,14 @@ jobs:
       
       - name: Buffalo Pop - Create Database
         run: buffalo pop create -a
+
+      - name: Buffalo Build
+        run: buffalo build
+
+      - name: Buffalo Tests
+        run: buffalo test
+
+      - name: Coverage Report
+        # Always run, including if the previous 'Buffalo Tests' step fails
+        if: success() || failure()
+        run: echo 'rawr!'
