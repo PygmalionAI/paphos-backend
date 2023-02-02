@@ -69,7 +69,7 @@ jobs:
         run: buffalo build
 
       - name: Buffalo Tests
-        run: buffalo test -coverprofile=CoverageReport.out
+        run: buffalo test
 
       - name: Coverage Report
         # Always run. Including if the previous 'tests' step fails
