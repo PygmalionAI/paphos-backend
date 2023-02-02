@@ -13,7 +13,7 @@ env:
   buffalo-cli-version: '0.18.13'
 
 jobs:
-  postgres:
+  container-job:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Docker Hub image that `container-job` executes in
@@ -27,7 +27,7 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: paphos
+          POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -37,7 +37,7 @@ jobs:
 
   dependencies:
     name: Install Dependencies
-    needs: postgres
+    needs: container-job
     runs-on: ubuntu-latest
 
     steps:
