@@ -14,9 +14,12 @@ env:
 
 jobs:
   postgres:
-    name: PostgreSQL
+    # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
+    # Docker Hub image that `container-job` executes in
     container: node:10.18-jessie
+
+    # Service containers to run with `container-job`
     services:
       # Label used to access the service container
       postgres:
@@ -32,3 +35,34 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+  dependencies:
+    name: Install Dependencies
+    needs: postgres
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{  env.go-version  }}
+        
+      - name: Install Buffalo
+        run: |
+          wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
+          tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
+          sudo mv buffalo /usr/local/bin/buffalo
+          
+      - name: Install Buffalo pop plugin
+        run: buffalo plugins install
+
+      - name: Go Version
+        run: go version
+
+      - name: Buffalo Version
+        run: buffalo version
+      
+      - name: Buffalo Pop - Create Database
+        run: buffalo pop create -a
