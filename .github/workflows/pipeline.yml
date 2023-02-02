@@ -69,9 +69,9 @@ jobs:
         run: buffalo build
 
       - name: Buffalo Tests
-        run: buffalo test
+        run: buffalo test -coverprofile=CoverageReport.out
 
       - name: Coverage Report
-        # Always run, including if the previous 'Buffalo Tests' step fails
+        # Always run. Including if the previous 'tests' step fails
         if: success() || failure()
-        run: echo 'rawr!'
+        run: cat CoverageReport.out
