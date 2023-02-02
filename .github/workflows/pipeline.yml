@@ -17,6 +17,8 @@ jobs:
     name: Install Dependencies
     runs-on: ubuntu-latest
 
+    container: node:10.18-jessie
+
 
 
     steps:
