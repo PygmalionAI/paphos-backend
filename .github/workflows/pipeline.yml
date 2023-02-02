@@ -25,9 +25,6 @@ jobs:
         with:
           go-version: ${{  env.go-version  }}
         
-      - name: Go Version
-        run: go version
-
       - name: Install Buffalo
         run: |
           wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
@@ -37,8 +34,11 @@ jobs:
       - name: Install Buffalo pop plugin
         run: buffalo plugins install
 
+      - name: Go Version
+        run: go version
+
       - name: Buffalo Version
         run: buffalo version
       
-      - name: Check Buffalo Actions
-        run: buffalo
+      - name: Buffalo Pop - Create Database
+        run: buffalo pop create -a
