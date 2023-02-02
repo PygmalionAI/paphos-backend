@@ -1,4 +1,4 @@
-name: Pygmalion UI Front End - Build / Quality Control
+name: Pygmalion Paphos Back End
 
 permissions:
   # This is required for actions/checkout
