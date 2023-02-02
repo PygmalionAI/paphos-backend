@@ -24,6 +24,8 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: ${{  env.go-version  }}
+        
+      - name: Go Version
         run: go version
 
       - name: Install Buffalo
