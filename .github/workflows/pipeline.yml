@@ -29,7 +29,7 @@ jobs:
         run: go version
 
       - name: Install Buffalo
-        run: 
+        run: |
           wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
           tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
           sudo mv buffalo /usr/local/bin/buffalo
