@@ -33,5 +33,12 @@ jobs:
           wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
           tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
           sudo mv buffalo /usr/local/bin/buffalo
-          buffalo version
-          buffalo
+          
+      - name: Install Buffalo pop plugin
+        run: buffalo plugins install
+
+      - name: Buffalo Version
+        run: buffalo version
+      
+      - name: Check Buffalo Actions
+        run: buffalo
