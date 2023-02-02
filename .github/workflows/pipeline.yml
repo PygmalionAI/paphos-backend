@@ -1,0 +1,35 @@
+name: Pygmalion UI Front End - Build / Quality Control
+
+permissions:
+  # This is required for actions/checkout
+  contents: read 
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:   
+
+env:
+  go-version: '1.19.1'
+  buffalo-cli-version: '0.18.13'
+
+jobs:
+  dependencies:
+    name: Install Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{  env.go-version  }}
+        run: go version
+
+      - name: Install Buffalo
+        run: 
+          wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
+          tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
+          sudo mv buffalo /usr/local/bin/buffalo
+          buffalo version
+          buffalo
