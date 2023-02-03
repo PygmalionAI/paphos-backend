@@ -95,11 +95,13 @@ jobs:
         run: coverage_report.html >> $GITHUB_STEP_SUMMARY
 
       - name: Move Report HTML to directory to publish on Github Pages
+        if: success() || failure() # Always run, including if earlier steps failed
         run: |
           mkdir public
           mv coverage_report.html ./public/coverage_report.html
 
       - name: "Publish test results"
+        if: success() || failure() # Always run, including if earlier steps failed
         uses: peaceiris/actions-gh-pages@v3.9.2
         with: 
           github_token: ${{ secrets.GITHUB_TOKEN }}
