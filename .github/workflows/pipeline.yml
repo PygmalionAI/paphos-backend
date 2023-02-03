@@ -94,9 +94,14 @@ jobs:
         if: success() || failure() # Always run, including if earlier steps failed
         run: coverage_report.html >> $GITHUB_STEP_SUMMARY
 
-      - name: HTML Preview
-        if: success() || failure() # Always run, including if earlier steps failed
-        id: html_preview
-        uses: pavi2410/html-preview-action@v2
-        with:
-          html_file: 'coverage_report.html'
+      - name: Move Report HTML to directory to publish on Github Pages
+        run: |
+          mkdir public
+          mv coverage_report.html ./public/coverage_report.html
+
+      - name: "Publish test results"
+        uses: peaceiris/actions-gh-pages@v3.9.2
+        with: 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          keep_files: true
