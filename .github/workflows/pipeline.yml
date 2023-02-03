@@ -89,6 +89,11 @@ jobs:
           recreate: true
           path: coverage_report.html
 
-      - name: Write to Job Summary
+      - name: Install Links
+        # This is required to correctly display the HTML of the Coverage Report
+        if: success() || failure() # Always run, including if earlier steps failed
+        run: sudo apt-get install links
+
+      - name: Write Coverage Report to Github Actions Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
         run: links coverage_report.html >> $GITHUB_STEP_SUMMARY
