@@ -98,7 +98,7 @@ jobs:
         if: success() || failure() # Always run, including if earlier steps failed
         run: |
           mkdir public
-          mv coverage_report.html ./public/coverage_report.html
+          mv coverage_report.html ./public/index.html
           cd public
           ls
 
