@@ -91,4 +91,4 @@ jobs:
 
       - name: Write to Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
-        run: cat coverage_report.html >> $GITHUB_STEP_SUMMARY
+        run: links coverage_report.html >> $GITHUB_STEP_SUMMARY
