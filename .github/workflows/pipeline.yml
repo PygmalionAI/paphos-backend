@@ -69,5 +69,12 @@ jobs:
       - name: Install Buffalo pop plugin
         run: buffalo plugins install
 
+      - name: bin
+        run: |
+          cd /usr/local/bin
+          pwd
+          ls
+
+
       - name: test
         run: buffalo plugins list
