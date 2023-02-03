@@ -89,18 +89,12 @@ jobs:
           recreate: true
           path: coverage_report.html
 
-
-      - name: Write Coverage Report to Github Actions Job Summary
-        if: success() || failure() # Always run, including if earlier steps failed
-        run: coverage_report.html >> $GITHUB_STEP_SUMMARY
-
       - name: Move Report HTML to directory to publish on Github Pages
         if: success() || failure() # Always run, including if earlier steps failed
         run: |
           mkdir public
-          
+          mv coverage_report.html ./public/index.html
           cd public
-          touch index.html
 
       - name: Deploy
         if: success() || failure() # Always run, including if earlier steps failed
@@ -108,3 +102,7 @@ jobs:
         with:
           folder: public
           branch: gh-pages
+
+      - name: Write Coverage Report to Github Actions Job Summary
+        if: success() || failure() # Always run, including if earlier steps failed
+        run: echo "Coverage Report Link https://${{  github.repository_owner  }}.github.io/paphos-backend/#file0" >> $GITHUB_STEP_SUMMARY
