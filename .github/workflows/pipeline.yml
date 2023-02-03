@@ -53,7 +53,7 @@ jobs:
 
       - name: test
         run: |
-          cd /usr/local
+          cd /opt/hostedtoolcache/
           pwd
           ls
  
