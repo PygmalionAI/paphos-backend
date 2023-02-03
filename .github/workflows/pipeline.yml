@@ -89,16 +89,6 @@ jobs:
           recreate: true
           path: coverage_report.html
 
-      '''
-      - name: Install Pandoc
-        if: success() || failure() # Always run, including if earlier steps failed
-        # required to convert the report from HTML to Markdown for pretty embedding in the Job Summary
-        run: sudo apt-get install pandoc
-
-      - name: Convert Coverage Report HTML to Markdown
-        if: success() || failure() # Always run, including if earlier steps failed
-        run: pandoc --from html --to markdown coverage_report.html -o coverage_report.md
-      '''
 
       - name: Write Coverage Report to Github Actions Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
