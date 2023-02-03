@@ -111,4 +111,4 @@ jobs:
 
       - name: Add Coverage Report Link to Github Actions Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
-        run: echo -e "Coverage Report Link https://${{  github.repository_owner  }}.github.io/${{  github.event.repository.name  }}/${{  github.run_number  }}/#file0  \n(NOTE - This link will not work until the 'pages build and deployment' job has completed. This typically takes around 1 minute)" >> $GITHUB_STEP_SUMMARY
+        run: echo -e "Test Coverage Report https://${{  github.repository_owner  }}.github.io/${{  github.event.repository.name  }}/${{  github.run_number  }}/#file0  \n(NOTE - This link will not work until the 'pages build and deployment' Github Actions Hob has completed. This typically takes around 1 minute)" >> $GITHUB_STEP_SUMMARY
