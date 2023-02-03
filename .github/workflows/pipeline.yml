@@ -51,85 +51,11 @@ jobs:
           go-version-file: './go.mod'
           cache: true
 
-      - name: Buffalo - Get Previously Cached Install & Dependencies
-        # cache is automatically saved after this job completes. jobs depending on this one will get the latest cached files
-        id: buffalo-cache-step
-        uses: actions/cache@v3
-        with:
-          path: '/home/runner/bin/buffalo'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/config/buffalo-plugins.toml') }}
-        
-      - name: Install Buffalo
-        if: steps.buffalo-cache-step.outputs.cache-hit != 'true'
+      - name: test
         run: |
-          wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
-          tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
-          sudo mv buffalo /usr/local/bin/buffalo
-          
-      - name: Install Buffalo pop plugin
-        if: steps.buffalo-cache-step.outputs.cache-hit != 'true'
-        run: buffalo plugins install
-
-      - name: Go Version
-        run: go version
-
-      - name: Buffalo Version
-        run: buffalo version
-
-      - name: Buffalo - save
-        # cache is automatically saved after this job completes. jobs depending on this one will get the latest cached files
-        uses: actions/cache/save@v3
-        with:
-          path: '${{ github.workspace }}/usr/local/bin/buffalo'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/config/buffalo-plugins.toml') }}
-
-      - name: Go Save
-        uses: actions/cache/save@v3
-        with:
-          path: '${{ github.workspace }}/usr/local/go'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/go.mod') }}
-      
-      - name: Buffalo Pop - Create Database
-        run: buffalo pop create -a
-
-      - name: Buffalo Build
-        run: buffalo build
-
-      - name: Buffalo Tests / Generate Coverage Report
-        run: buffalo test -coverprofile=c.out ./...
-
-      - name: Convert Test Coverage Report to be Human Readable
-        if: success() || failure() # Always run, including if earlier steps failed
-        run: go tool cover -html c.out -o coverage_report.html
-
-      - name: Upload Test Coverage Report as Artifact
-        if: success() || failure() # Always run, including if earlier steps failed
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-coverage-report
-          path: ./coverage_report.html
-
-      - name: Add Test Coverage Pull Request Comment (if on PR)
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request' && (success() || failure())
-        with:
-          recreate: true
-          path: coverage_report.html
-
-      - name: Move Test Coverage Report HTML to directory to publish on 'gh-pages' Branch (Github Pages)
-        if: success() || failure() # Always run, including if earlier steps failed
-        run: |
-          mkdir -p public/${{  github.run_number  }}
-          mv coverage_report.html ./public/${{  github.run_number  }}/index.html
-
-      - name: Add Test Coverage Report Artifact to 'gh-pages' Branch (Github Pages)
-        if: success() || failure() # Always run, including if earlier steps failed
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: public
-          branch: gh-pages
-          force: false
-
-      - name: Add Test Coverage Report Link to Github Actions Job Summary
-        if: success() || failure() # Always run, including if earlier steps failed
-        run: echo -e "Test Coverage Report https://${{  github.repository_owner  }}.github.io/${{  github.event.repository.name  }}/${{  github.run_number  }}/#file0  \n(NOTE - This link will not work until the 'pages build and deployment' Github Actions Hob has completed. This typically takes around 1 minute)" >> $GITHUB_STEP_SUMMARY
+          pwd
+          ls
+          cd /usr/
+          pwd
+          ls
+ 
