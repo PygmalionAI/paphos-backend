@@ -68,5 +68,14 @@ jobs:
       - name: Buffalo Build
         run: buffalo build
 
-      - name: Buffalo Tests / Coverage
+      - name: Buffalo Tests / Generate Coverage Report
         run: buffalo test -coverprofile=c.out ./...
+
+      - name: Convert Coverage Report to be Human Readable
+        run: go tool cover -html c.out -o coverage_report.html
+
+      - name: Upload Coverage Report as Artifact
+        uses: actions/upload-artifact@v3
+          with:
+            name: test-coverage-report
+            path: ./coverage_report.html
