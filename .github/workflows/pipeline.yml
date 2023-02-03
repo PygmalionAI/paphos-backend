@@ -89,11 +89,13 @@ jobs:
           recreate: true
           path: coverage_report.html
 
-      - name: Install Links
-        # This is required to correctly display the HTML of the Coverage Report
-        if: success() || failure() # Always run, including if earlier steps failed
-        run: sudo apt-get install links
+      - name: Install Pandoc
+        # required to convert the report from HTML to Markdown for pretty embedding in the Job Summary
+        run: sudo apt-get install pandoc
+
+      - name: Convert Coverage Report HTML to Markdown
+        run: pandoc --from html --to markdown coverage_report.html -o coverage_report.md
 
       - name: Write Coverage Report to Github Actions Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
-        run: links coverage_report.html >> $GITHUB_STEP_SUMMARY
+        run: cat coverage_report.md >> $GITHUB_STEP_SUMMARY
