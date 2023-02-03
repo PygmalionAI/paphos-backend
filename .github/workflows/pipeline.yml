@@ -81,3 +81,13 @@ jobs:
         with:
           name: test-coverage-report
           path: ./coverage_report.html
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: coverage_report.html
+
+      - name: Write to Job Summary
+        run: cat coverage_report.html >> $GITHUB_STEP_SUMMARY
