@@ -89,6 +89,7 @@ jobs:
           recreate: true
           path: coverage_report.html
 
+      '''
       - name: Install Pandoc
         if: success() || failure() # Always run, including if earlier steps failed
         # required to convert the report from HTML to Markdown for pretty embedding in the Job Summary
@@ -97,7 +98,8 @@ jobs:
       - name: Convert Coverage Report HTML to Markdown
         if: success() || failure() # Always run, including if earlier steps failed
         run: pandoc --from html --to markdown coverage_report.html -o coverage_report.md
+      '''
 
       - name: Write Coverage Report to Github Actions Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
-        run: cat coverage_report.md >> $GITHUB_STEP_SUMMARY
+        run: coverage_report.html >> $GITHUB_STEP_SUMMARY
