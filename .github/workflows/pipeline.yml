@@ -52,7 +52,7 @@ jobs:
           cache: true
 
       - name: Buffalo - Get Previously Cached Install & Dependencies
-        # cache is automatically saved after this job completes. jobs depending on this one will get the latest cached files
+        # cache is automatically saved after this job completes
         id: buffalo-cache-step
         uses: actions/cache@v3
         with:
@@ -67,11 +67,13 @@ jobs:
           sudo mv buffalo /usr/local/bin/buffalo
 
       - name: Install Buffalo pop plugin
-        if: steps.buffalo-cache-step.outputs.cache-hit != 'true'
         run: buffalo plugins install
 
       - name: Buffalo Pop - Create Database
         run: buffalo pop create -a
+
+      - name: Buffalo Pop - Apply Migrations
+        run: buffalo pop migrate
 
       - name: Buffalo Build
         run: buffalo build
