@@ -99,11 +99,11 @@ jobs:
         run: |
           mkdir public
           mv coverage_report.html ./public/coverage_report.html
+          cd public
+          ls
 
-      - name: "Publish test results"
-        if: success() || failure() # Always run, including if earlier steps failed
-        uses: peaceiris/actions-gh-pages@v3.9.2
-        with: 
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          keep_files: true
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: public
+          branch: gh-pages
