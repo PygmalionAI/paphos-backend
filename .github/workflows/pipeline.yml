@@ -75,6 +75,9 @@ jobs:
           pwd
           ls
 
+      - name: find
+        run: find ~/ -type f -name "buffalo-pop"
+
 
       - name: test
         run: buffalo plugins list
