@@ -45,7 +45,7 @@ jobs:
       - name: Checkout GH Pages
         uses: actions/checkout@v3
         with:
-          repository: ${{  github.repository_owner  }}/gh-pages
+          ref: gh-pages
           path: public
 
       - name: Install Go
