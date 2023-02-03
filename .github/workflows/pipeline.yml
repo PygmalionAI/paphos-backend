@@ -42,7 +42,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Checkout tools repo
+      - name: Checkout GH Pages
         uses: actions/checkout@v3
         with:
           repository: ${{  github.repository_owner  }}/gh-pages
