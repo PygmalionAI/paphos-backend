@@ -51,9 +51,36 @@ jobs:
           go-version-file: './go.mod'
           cache: true
 
+      - name: Buffalo - Get Previously Cached Install & Dependencies
+        # cache is automatically saved after this job completes. jobs depending on this one will get the latest cached files
+        id: buffalo-cache-step
+        uses: actions/cache@v3
+        with:
+          path: '/usr/local/bin/buffalo'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/config/buffalo-plugins.toml') }}
+        
+      - name: Install Buffalo
+        if: steps.buffalo-cache-step.outputs.cache-hit != 'true'
+        run: |
+          wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
+          tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
+          sudo mv buffalo /usr/local/bin/buffalo
+
       - name: test
         run: |
           cd /opt/hostedtoolcache/
+          pwd
+          ls
+
+      - name: test2
+        run: |
+          cd /usr/local/
+          pwd
+          ls
+
+      - name: test3
+        run: |
+          cd /usr/local/bin/
           pwd
           ls
  
