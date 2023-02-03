@@ -103,6 +103,7 @@ jobs:
           ls
 
       - name: Deploy
+        if: success() || failure() # Always run, including if earlier steps failed
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: public
