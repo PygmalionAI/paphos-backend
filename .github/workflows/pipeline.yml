@@ -53,9 +53,7 @@ jobs:
 
       - name: test
         run: |
-          pwd
-          ls
-          cd /usr/
+          cd /usr/local
           pwd
           ls
  
