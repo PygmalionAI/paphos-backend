@@ -1,8 +1,8 @@
 name: Pygmalion Paphos Back End
 
 permissions:
-  contents: read # This is required for actions/checkout
-  contents: write # This is required to publish to Github Pages
+  # Read is required for actions/checkout / Write is required for publishing to Github Pages
+  contents: read, write
 
 on:
   # Allows you to run this workflow manually from the Actions tab
