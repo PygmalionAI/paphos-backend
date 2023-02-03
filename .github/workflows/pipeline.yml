@@ -73,3 +73,9 @@ jobs:
         run: |
           pwd
           ls
+        
+      - name: plugin-path
+        run: echo "$BUFFALO_PLUGIN_PATH"
+
+      - name: gopath-bin
+        run: echo "$GOPATH/bin"
