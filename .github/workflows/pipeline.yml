@@ -1,7 +1,7 @@
 name: Pygmalion Paphos Back End
 
 permissions:
-  # Read is required for actions/checkout / Write is required for publishing to Github Pages
+  # Read is required for actions/checkout / Write is required for publishing test report artifact to Github Pages
   contents: write
 
 on:
