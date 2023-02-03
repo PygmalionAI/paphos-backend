@@ -69,50 +69,7 @@ jobs:
       - name: Install Buffalo pop plugin
         run: buffalo plugins install
 
-      - name: Buffalo Pop - Create Database
-        run: buffalo pop create -a
-
-      - name: Buffalo Pop - Apply Migrations
-        run: buffalo pop migrate
-
-      - name: Buffalo Build
-        run: buffalo build
-
-      - name: Buffalo Tests / Generate Coverage Report
-        run: buffalo test -coverprofile=c.out ./...
-
-      - name: Convert Test Coverage Report to be Human Readable
-        if: success() || failure() # Always run, including if earlier steps failed
-        run: go tool cover -html c.out -o coverage_report.html
-
-      - name: Upload Test Coverage Report as Artifact
-        if: success() || failure() # Always run, including if earlier steps failed
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-coverage-report
-          path: ./coverage_report.html
-
-      - name: Add Test Coverage Pull Request Comment (if on PR)
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request' && (success() || failure())
-        with:
-          recreate: true
-          path: coverage_report.html
-
-      - name: Move Test Coverage Report HTML to directory to publish on 'gh-pages' Branch (Github Pages)
-        if: success() || failure() # Always run, including if earlier steps failed
+      - name: test
         run: |
-          mkdir -p public/${{  github.run_number  }}
-          mv coverage_report.html ./public/${{  github.run_number  }}/index.html
-
-      - name: Add Test Coverage Report Artifact to 'gh-pages' Branch (Github Pages)
-        if: success() || failure() # Always run, including if earlier steps failed
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: public
-          branch: gh-pages
-          force: false
-
-      - name: Add Test Coverage Report Link to Github Actions Job Summary
-        if: success() || failure() # Always run, including if earlier steps failed
-        run: echo -e "Test Coverage Report https://${{  github.repository_owner  }}.github.io/${{  github.event.repository.name  }}/${{  github.run_number  }}/#file0  \n(NOTE - This link will not work until the 'pages build and deployment' Github Actions Hob has completed. This typically takes around 1 minute)" >> $GITHUB_STEP_SUMMARY
+          pwd
+          ls
