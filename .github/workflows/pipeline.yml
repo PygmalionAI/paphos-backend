@@ -47,13 +47,21 @@ jobs:
           ref: gh-pages
           path: public
 
+      - name: Cache Go Install
+        uses: actions/cache@v3
+        id: go-cache-step
+        with:
+          path: '**/usr/local/go'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/go.mod') }}
+
       - name: Install Go
+        if: steps.go-cache-step.outputs.cache-hit != 'true'
         uses: actions/setup-go@v3
         with:
           go-version-file: './go.mod'
           cache: true # Caches Go dependencies
 
-      - name: Get Previously Cache Dependencies
+      - name: Buffalo - Get Previously Cached Install & Dependencies
         # cache is automatically saved after this job completes. jobs depending on this one will get the latest cached files
         id: buffalo-cache-step
         uses: actions/cache@v3
