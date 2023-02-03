@@ -92,9 +92,8 @@ jobs:
       - name: Move Report HTML to directory to publish on Github Pages
         if: success() || failure() # Always run, including if earlier steps failed
         run: |
-          mkdir public
-          mv coverage_report.html ./public/index.html
-          cd public
+          mkdir -p public/${{  github.run_number  }}
+          mv coverage_report.html ./public/${{  github.run_number  }}/index.html
 
       - name: Deploy
         if: success() || failure() # Always run, including if earlier steps failed
@@ -103,6 +102,6 @@ jobs:
           folder: public
           branch: gh-pages
 
-      - name: Write Coverage Report to Github Actions Job Summary
+      - name: Add Coverage Report Link to Github Actions Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
         run: echo "Coverage Report Link https://${{  github.repository_owner  }}.github.io/paphos-backend/#file0" >> $GITHUB_STEP_SUMMARY
