@@ -104,4 +104,4 @@ jobs:
 
       - name: Add Coverage Report Link to Github Actions Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
-        run: echo "Coverage Report Link https://${{  github.repository_owner  }}.github.io/paphos-backend/#file0" >> $GITHUB_STEP_SUMMARY
+        run: echo "Coverage Report Link https://${{  github.repository_owner  }}.github.io/paphos-backend/${{  github.run_number  }}/#file0" >> $GITHUB_STEP_SUMMARY
