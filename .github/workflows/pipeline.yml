@@ -52,6 +52,7 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: ${{  env.go-version  }}
+          cache: true
         
       - name: Install Buffalo
         run: |
@@ -77,31 +78,31 @@ jobs:
       - name: Buffalo Tests / Generate Coverage Report
         run: buffalo test -coverprofile=c.out ./...
 
-      - name: Convert Coverage Report to be Human Readable
+      - name: Convert Test Coverage Report to be Human Readable
         if: success() || failure() # Always run, including if earlier steps failed
         run: go tool cover -html c.out -o coverage_report.html
 
-      - name: Upload Coverage Report as Artifact
+      - name: Upload Test Coverage Report as Artifact
         if: success() || failure() # Always run, including if earlier steps failed
         uses: actions/upload-artifact@v3
         with:
           name: test-coverage-report
           path: ./coverage_report.html
 
-      - name: Add Coverage PR Comment
+      - name: Add Test Coverage Pull Request Comment (if on PR)
         uses: marocchino/sticky-pull-request-comment@v2
         if: github.event_name == 'pull_request' && (success() || failure())
         with:
           recreate: true
           path: coverage_report.html
 
-      - name: Move Report HTML to directory to publish on Github Pages
+      - name: Move Test Coverage Report HTML to directory to publish on 'gh-pages' Branch (Github Pages)
         if: success() || failure() # Always run, including if earlier steps failed
         run: |
           mkdir -p public/${{  github.run_number  }}
           mv coverage_report.html ./public/${{  github.run_number  }}/index.html
 
-      - name: Deploy
+      - name: Add Test Coverage Report Artifact to 'gh-pages' Branch (Github Pages)
         if: success() || failure() # Always run, including if earlier steps failed
         uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -109,6 +110,6 @@ jobs:
           branch: gh-pages
           force: false
 
-      - name: Add Coverage Report Link to Github Actions Job Summary
+      - name: Add Test Coverage Report Link to Github Actions Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
         run: echo -e "Test Coverage Report https://${{  github.repository_owner  }}.github.io/${{  github.event.repository.name  }}/${{  github.run_number  }}/#file0  \n(NOTE - This link will not work until the 'pages build and deployment' Github Actions Hob has completed. This typically takes around 1 minute)" >> $GITHUB_STEP_SUMMARY
