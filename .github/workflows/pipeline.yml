@@ -51,7 +51,7 @@ jobs:
           go-version-file: './go.mod'
           cache: true
 
-      - name: Buffalo - Get Previously Cached Install & Dependencies
+      - name: Buffalo - Get Previously Cached Install
         # cache is automatically saved after this job completes
         id: buffalo-cache-step
         uses: actions/cache@v3
@@ -67,8 +67,17 @@ jobs:
           tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
           sudo mv buffalo /usr/local/bin/buffalo
 
+      - name: Buffalo - Get Previously Cached Dependencies
+        # cache is automatically saved after this job completes
+        id: buffalo-cache-dependencies-step
+        uses: actions/cache@v3
+        with:
+          # buffalo-pop plugin in /go/bin/ folder
+          path: '/home/runner/go/bin'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/config/buffalo-plugins.toml') }}
+
       - name: Install Buffalo pop plugin
-        if: steps.buffalo-cache-step.outputs.cache-hit != 'true'
+        if: steps.buffalo-cache-dependencies-step.outputs.cache-hit != 'true'
         run: buffalo plugins install
 
       - name: bin
