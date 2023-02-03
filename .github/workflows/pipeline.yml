@@ -72,9 +72,11 @@ jobs:
         run: buffalo test -coverprofile=c.out ./...
 
       - name: Convert Coverage Report to be Human Readable
+        if: success() || failure() # Always run, including if earlier steps failed
         run: go tool cover -html c.out -o coverage_report.html
 
       - name: Upload Coverage Report as Artifact
+        if: success() || failure() # Always run, including if earlier steps failed
         uses: actions/upload-artifact@v3
         with:
           name: test-coverage-report
