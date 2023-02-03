@@ -60,7 +60,6 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/config/buffalo-plugins.toml') }}
         
       - name: Install Buffalo
-        if: steps.buffalo-cache-step.outputs.cache-hit != 'true'
         run: |
           wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
           tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
@@ -75,7 +74,7 @@ jobs:
           ls
         
       - name: plugin-path
-        run: echo "$BUFFALO_PLUGIN_PATH"
+        run: echo $BUFFALO_PLUGIN_PATH
 
       - name: gopath-bin
-        run: echo "$GOPATH/bin"
+        run: echo $GOPATH/bin
