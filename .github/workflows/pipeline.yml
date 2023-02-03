@@ -56,7 +56,6 @@ jobs:
         id: buffalo-cache-step
         uses: actions/cache@v3
         with:
-          # buffalo-pop plugin in /go/bin/ folder
           path: '/usr/local/bin/buffalo'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/config/buffalo-plugins.toml') }}
         
