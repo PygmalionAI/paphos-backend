@@ -93,3 +93,9 @@ jobs:
       - name: Write Coverage Report to Github Actions Job Summary
         if: success() || failure() # Always run, including if earlier steps failed
         run: coverage_report.html >> $GITHUB_STEP_SUMMARY
+
+      - name: HTML Preview
+        id: html_preview
+        uses: pavi2410/html-preview-action@v2
+        with:
+          html_file: 'coverage_report.html'
