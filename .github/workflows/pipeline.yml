@@ -9,7 +9,6 @@ on:
   workflow_dispatch:   
 
 env:
-  go-version: '1.19.1'
   buffalo-cli-version: '0.18.13'
   #PostgreSQL Credentials
   PGUSER: paphos
@@ -51,16 +50,26 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{  env.go-version  }}
-          cache: true
+          go-version-file: './go.mod'
+          cache: true # Caches Go dependencies
+
+      - name: Get Previously Cache Dependencies
+        # cache is automatically saved after this job completes. jobs depending on this one will get the latest cached files
+        id: buffalo-cache-step
+        uses: actions/cache@v3
+        with:
+          path: '**/usr/local/bin/buffalo'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/config/buffalo-plugins.toml') }}
         
       - name: Install Buffalo
+        if: steps.buffalo-cache-step.outputs.cache-hit != 'true'
         run: |
           wget https://github.com/gobuffalo/cli/releases/download/v0.18.13/buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
           tar -xvzf buffalo_${{  env.buffalo-cli-version  }}_Linux_x86_64.tar.gz
           sudo mv buffalo /usr/local/bin/buffalo
           
       - name: Install Buffalo pop plugin
+        if: steps.buffalo-cache-step.outputs.cache-hit != 'true'
         run: buffalo plugins install
 
       - name: Go Version
