@@ -17,7 +17,7 @@ env:
 
 jobs:
   # Label of the container job
-  dependencies:
+  paphos-backend-tests:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
 
