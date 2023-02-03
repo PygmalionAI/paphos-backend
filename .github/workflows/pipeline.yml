@@ -83,9 +83,8 @@ jobs:
           path: ./coverage_report.html
 
       - name: Add Coverage PR Comment
-        if: success() || failure() # Always run, including if earlier steps failed
         uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && (success() || failure())
         with:
           recreate: true
           path: coverage_report.html
