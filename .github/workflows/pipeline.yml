@@ -56,7 +56,9 @@ jobs:
         id: buffalo-cache-step
         uses: actions/cache@v3
         with:
-          path: '/usr/local/bin/buffalo'
+          path: |
+            '/usr/local/bin/buffalo'
+            '/home/runner/go/bin/buffalo-pop'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/config/buffalo-plugins.toml') }}
         
       - name: Install Buffalo
@@ -67,6 +69,7 @@ jobs:
           sudo mv buffalo /usr/local/bin/buffalo
 
       - name: Install Buffalo pop plugin
+        if: steps.buffalo-cache-step.outputs.cache-hit != 'true'
         run: buffalo plugins install
 
       - name: bin
