@@ -46,13 +46,13 @@ var (
 // placed last in the route declarations, as it will prevent routes
 // declared after it to never be called.
 
-// @title          Paphos API
-// @version        1.0
-// @description    Base backend API to serve Pygamilion UI
-// @termsOfService http://swagger.io/terms/
+// @title                    Paphos API
+// @version                  1.0
+// @description              Base backend API to serve Pygamilion UI
+// @termsOfService           http://swagger.io/terms/
 
-// @license.name   AGPL 3.0
-// @license.url    http://www.apache.org/licenses/LICENSE-2.0.html
+// @license.name             AGPL 3.0
+// @license.url              https://www.gnu.org/licenses/agpl-3.0.en.html
 
 // @host                     localhost:3000
 // @BasePath                 /api/v1
