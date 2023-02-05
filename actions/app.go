@@ -19,11 +19,7 @@ import (
 	"github.com/gobuffalo/x/sessions"
 	"github.com/rs/cors"
 	"github.com/unrolled/secure"
-
-	_ "paphos/docs"
-
-	buffaloSwagger "github.com/swaggo/buffalo-swagger"
-	"github.com/swaggo/buffalo-swagger/swaggerFiles"
+	//_ "paphos/docs"
 )
 
 // ENV is used to help switch settings based on where the
@@ -112,10 +108,10 @@ func App() *buffalo.App {
 
 		apiV1Group.Resource("/characters", CharactersResource{})
 
-		app.GET("/swagger/{doc:.*}", buffaloSwagger.WrapHandler(swaggerFiles.Handler))
-		app.GET("/", func(c buffalo.Context) error {
-			return c.Redirect(301, "/swagger/index.html") // redirect to swagger route
-		})
+		// app.GET("/swagger/{doc:.*}", buffaloSwagger.WrapHandler(swaggerFiles.Handler))
+		// app.GET("/", func(c buffalo.Context) error {
+		// 	return c.Redirect(301, "/swagger/index.html") // redirect to swagger route
+		// })
 
 		// Disabled for now since we don't need this in the front-end yet and it
 		// leaks user emails.
