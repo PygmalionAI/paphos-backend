@@ -29,7 +29,27 @@ import (
 	return c.Render(200, r.JSON(user))
 } */
 
-// UsersRegisterPost registers a new User.
+type RegisterParameters struct {
+	Email                string `json:email example: example@mail.com`
+	DisplayName          string `json:display_name example: My Name`
+	Password             string `json:password example: pass123`
+	PasswordConfirmation string `json:password_confirmation example: pass123`
+}
+
+type LoginParameters struct {
+	Email    string `json:email example: example@mail.com`
+	Password string `json:password example: pass123`
+}
+
+// UsersRegisterPost godoc
+// POST
+// @Summary      Registers a new User
+// @Description  Registers a new User in the DB.
+// @Tags         Users
+// @Param        register  body  RegisterParameters  true  "Register Body"
+// @Produce      json
+// @Success      200
+// @Router       /users/register [POST]
 func UsersRegisterPost(c buffalo.Context) error {
 	// Allocate an empty User
 	user := &models.User{}
@@ -62,7 +82,16 @@ func UsersRegisterPost(c buffalo.Context) error {
 	}{user.ID, user.Email, user.DisplayName}))
 }
 
-// UsersLoginPost logs a user in by returning a session JWT.
+// UsersLoginPost godoc
+// POST
+// @Summary      Log the user in.
+// @Description  Logs a user in by returning a session JWT.
+// @Tags         Users
+// @Param        login  body  LoginParameters  true  "Login Body"
+// @Accept       json
+// @Produce      json
+// @Success      200
+// @Router       /users/login [POST]
 func UsersLoginPost(c buffalo.Context) error {
 	user := &models.User{}
 
