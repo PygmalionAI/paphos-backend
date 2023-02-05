@@ -19,6 +19,11 @@ import (
 	"github.com/gobuffalo/x/sessions"
 	"github.com/rs/cors"
 	"github.com/unrolled/secure"
+
+	_ "paphos/docs"
+
+	buffaloSwagger "github.com/swaggo/buffalo-swagger"
+	"github.com/swaggo/buffalo-swagger/swaggerFiles"
 )
 
 // ENV is used to help switch settings based on where the
@@ -44,6 +49,22 @@ var (
 // `ServeFiles` is a CATCH-ALL route, so it should always be
 // placed last in the route declarations, as it will prevent routes
 // declared after it to never be called.
+
+// @title          Paphos API
+// @version        1.0
+// @description    Base backend API to serve Pygamillion UI
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name   Apache 2.0
+// @license.url    http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host                     tobedefined.com
+// @BasePath                  /api/v1
+// @securityDefinitions.bearer BearerAuth
 func App() *buffalo.App {
 	appOnce.Do(func() {
 		app = buffalo.New(buffalo.Options{
@@ -94,6 +115,11 @@ func App() *buffalo.App {
 		apiV1Group.Use(shared.ExtractDataFromJWTMiddleware)
 
 		apiV1Group.Resource("/characters", CharactersResource{})
+
+		app.GET("/swagger/{doc:.*}", buffaloSwagger.WrapHandler(swaggerFiles.Handler))
+		app.GET("/", func(c buffalo.Context) error {
+			return c.Redirect(301, "/swagger/index.html") // redirect to swagger route
+		})
 
 		// Disabled for now since we don't need this in the front-end yet and it
 		// leaks user emails.
