@@ -1,21 +1,17 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Base backend API to serve Pygamillion UI",
+        "description": "Base backend API to serve Pygamilion UI",
         "title": "Paphos API",
         "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
+        "contact": {},
         "license": {
-            "name": "Apache 2.0",
+            "name": "AGPL 3.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
         "version": "1.0"
     },
-    "host": "tobedefined.com",
+    "host": "localhost:3000",
     "basePath": "/api/v1",
     "paths": {
         "/characters": {

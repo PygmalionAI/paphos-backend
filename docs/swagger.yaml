@@ -53,15 +53,12 @@ definitions:
         description: Valid is true if String is not NULL
         type: boolean
     type: object
-host: tobedefined.com
+host: localhost:3000
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: Base backend API to serve Pygamillion UI
+  contact: {}
+  description: Base backend API to serve Pygamilion UI
   license:
-    name: Apache 2.0
+    name: AGPL 3.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
   title: Paphos API

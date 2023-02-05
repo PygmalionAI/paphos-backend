@@ -52,18 +52,14 @@ var (
 
 // @title          Paphos API
 // @version        1.0
-// @description    Base backend API to serve Pygamillion UI
+// @description    Base backend API to serve Pygamilion UI
 // @termsOfService http://swagger.io/terms/
 
-// @contact.name   API Support
-// @contact.url    http://www.swagger.io/support
-// @contact.email  support@swagger.io
-
-// @license.name   Apache 2.0
+// @license.name   AGPL 3.0
 // @license.url    http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host                     tobedefined.com
-// @BasePath                  /api/v1
+// @host                     localhost:3000
+// @BasePath                 /api/v1
 // @securityDefinitions.bearer BearerAuth
 func App() *buffalo.App {
 	appOnce.Do(func() {
