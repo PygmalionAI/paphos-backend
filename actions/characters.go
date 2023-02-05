@@ -38,7 +38,7 @@ type CharactersResource struct {
 // @Success      200  {object}  models.Characters
 // @Router       /characters [get]
 func (v CharactersResource) List(c buffalo.Context) error {
-	// Get the DB connection rom the context
+	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return fmt.Errorf("no transaction found")
