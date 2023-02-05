@@ -30,3 +30,7 @@ generated/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+docs/docs.go
+docs/swagger.json
+docs/swagger.yaml

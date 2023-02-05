@@ -28,8 +28,15 @@ type CharactersResource struct {
 	buffalo.Resource
 }
 
-// List gets all Characters. This function is mapped to the path
-// GET /characters
+// List godoc
+// GET
+// @Summary      List gets all Characters
+// @Description  Returns a JSON list of all the characters registered in the databases with the possibility of pagination
+// @Tags         Characters
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Characters
+// @Router       /characters [get]
 func (v CharactersResource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
@@ -59,8 +66,16 @@ func (v CharactersResource) List(c buffalo.Context) error {
 	return c.Render(200, r.JSON(characters))
 }
 
-// Show gets the data for one Character. This function is mapped to
-// the path GET /characters/{character_id}
+// Show godoc
+// GET
+// @Summary      Show gets the data for one Character
+// @Description  Returns a JSON data of the given character ID
+// @Tags         Characters
+// @Accept       json
+// @Produce      json
+// @Param        character_id   path  int  true  "Character ID"
+// @Success      200  {object}  models.Character
+// @Router       /characters/{character_id} [get]
 func (v CharactersResource) Show(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
@@ -87,8 +102,15 @@ func (v CharactersResource) Show(c buffalo.Context) error {
 	return c.Render(200, r.JSON(character))
 }
 
-// Create adds a Character to the DB. This function is mapped to the
-// path POST /characters
+// Create godoc
+// POST
+// @Summary      Inserts a new a Character to the DB
+// @Description  Returns a JSON data of the given character ID
+// @Tags         Characters
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Character
+// @Router       /characters/ [post]
 func (v CharactersResource) Create(c buffalo.Context) error {
 	// Allocate an empty Character
 	character := &models.Character{}
@@ -125,8 +147,16 @@ func (v CharactersResource) Create(c buffalo.Context) error {
 	return c.Render(http.StatusCreated, r.JSON(character))
 }
 
-// Update changes a Character in the DB. This function is mapped to
-// the path PUT /characters/{character_id}
+// Create godoc
+// PUT
+// @Summary      Updates a Character inside the DB
+// @Description  Returns a JSON data of the given character ID
+// @Tags         Characters
+// @Accept       json
+// @Produce      json
+// @Param        character_id   path  int  true  "Character ID"
+// @Success      200  {object}  models.Character
+// @Router       /characters/{character_id} [PUT]
 func (v CharactersResource) Update(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
