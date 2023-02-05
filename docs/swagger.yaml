@@ -1,0 +1,182 @@
+basePath: /api/v1
+definitions:
+  actions.LoginParameters:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  actions.RegisterParameters:
+    properties:
+      displayName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      passwordConfirmation:
+        type: string
+    type: object
+  models.Character:
+    properties:
+      avatar_id:
+        $ref: '#/definitions/nulls.String'
+      contentious:
+        type: boolean
+      created_at:
+        type: string
+      description:
+        type: string
+      example_chats:
+        $ref: '#/definitions/nulls.String'
+      greeting:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      persona:
+        type: string
+      updated_at:
+        type: string
+      visibility:
+        type: string
+      world_scenario:
+        $ref: '#/definitions/nulls.String'
+    type: object
+  nulls.String:
+    properties:
+      string:
+        type: string
+      valid:
+        description: Valid is true if String is not NULL
+        type: boolean
+    type: object
+host: tobedefined.com
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Base backend API to serve Pygamillion UI
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Paphos API
+  version: "1.0"
+paths:
+  /characters:
+    get:
+      consumes:
+      - application/json
+      description: Returns a JSON list of all the characters registered in the databases
+        with the possibility of pagination
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Character'
+            type: array
+      summary: List gets all Characters
+      tags:
+      - Characters
+  /characters/:
+    post:
+      consumes:
+      - application/json
+      description: Returns a JSON data of the given character ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Character'
+      summary: Inserts a new a Character to the DB
+      tags:
+      - Characters
+  /characters/{character_id}:
+    get:
+      consumes:
+      - application/json
+      description: Returns a JSON data of the given character ID
+      parameters:
+      - description: Character ID
+        in: path
+        name: character_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Character'
+      summary: Show gets the data for one Character
+      tags:
+      - Characters
+    put:
+      consumes:
+      - application/json
+      description: Returns a JSON data of the given character ID
+      parameters:
+      - description: Character ID
+        in: path
+        name: character_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Character'
+      summary: Updates a Character inside the DB
+      tags:
+      - Characters
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Logs a user in by returning a session JWT.
+      parameters:
+      - description: Login Body
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/actions.LoginParameters'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Log the user in.
+      tags:
+      - Users
+  /users/register:
+    post:
+      description: Registers a new User in the DB.
+      parameters:
+      - description: Register Body
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/actions.RegisterParameters'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Registers a new User
+      tags:
+      - Users
+swagger: "2.0"
