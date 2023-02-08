@@ -16,7 +16,9 @@ The stack is:
 
 To get started, you need all of the above installed and functional on your machine.
 
-For development, the [default configuration](./database.yml) expects a `paphos` user with password `paphos` to be available. You can then create the databases manually, or use `buffalo pop create -a`.
+For development, the [default configuration](./database.yml) expects a `paphos` user with password `paphos` to be available. You can then create the databases manually, or use `buffalo pop create -a` after the Buffalo plugins are installed (`buffalo plugins install`).
+
+**Note:** For running tests with `buffalo test`, `paphos` must be a PostgreSQL superuser.
 
 With PostgreSQL up and running and the development database created, you can apply the migrations:
 
