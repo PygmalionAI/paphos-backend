@@ -89,7 +89,7 @@ func (c *Character) Validate(tx *pop.Connection) (*validate.Errors, error) {
 		&validators.StringLengthInRange{Field: c.Name, Name: "Name", Min: 1, Max: 32},
 
 		&validators.StringIsPresent{Field: c.Description, Name: "Description"},
-		&validators.StringLengthInRange{Field: c.Description, Name: "Description", Min: 12, Max: 64},
+		&validators.StringLengthInRange{Field: c.Description, Name: "Description", Min: 8, Max: 64},
 
 		&validators.StringIsPresent{Field: c.Greeting, Name: "Greeting"},
 		&validators.StringLengthInRange{Field: c.Greeting, Name: "Greeting", Min: 2, Max: 1024},
