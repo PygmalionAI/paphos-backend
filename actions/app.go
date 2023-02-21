@@ -107,6 +107,7 @@ func App() *buffalo.App {
 		apiV1Group.Use(shared.ExtractDataFromJWTMiddleware)
 
 		apiV1Group.Resource("/characters", CharactersResource{})
+		apiV1Group.Resource("/chats", ChatsResource{})
 
 		// app.GET("/swagger/{doc:.*}", buffaloSwagger.WrapHandler(swaggerFiles.Handler))
 		// app.GET("/", func(c buffalo.Context) error {
