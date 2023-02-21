@@ -153,10 +153,63 @@ func (v ChatsResource) List(c buffalo.Context) error {
 	chats := &models.Chats{}
 	if err := query.
 		EagerPreload().
-		Where("owner_id = ?", userUUID).
+		Scope(models.ChatsAccessibleByUser(userUUID)).
 		All(chats); err != nil {
 		return err
 	}
 
 	return c.Render(200, r.JSON(chats))
+}
+
+// ChatUpdateParams defines the request body required when updating a Chat.
+type ChatUpdateParams struct {
+	Name nulls.String `json:"name" example:"Renamed chat"`
+}
+
+// Update allows updating the name of a given Chat.
+func (v ChatsResource) Update(c buffalo.Context) error {
+	// Parse request body into the `params` struct.
+	params := &ChatUpdateParams{}
+	if err := c.Bind(params); err != nil {
+		return err
+	}
+
+	// Get the database transaction from the request context.
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return fmt.Errorf("no transaction found")
+	}
+
+	// Find the Chat referenced by the ID given in the path parameters, making
+	// sure that it is accessible to the current user.
+	userUUID, err := shared.ExtractUserUUIDFromContext(c)
+	if err != nil {
+		return err
+	}
+
+	chat := &models.Chat{}
+	query := tx.
+		// Select("id", "owner_id").
+		Scope(models.ChatsAccessibleByUser(userUUID)).
+		Where("id = ?", c.Param("chat_id"))
+	if err := query.First(chat); err != nil {
+		return err
+	}
+	if chat.ID.IsNil() {
+		return c.Error(http.StatusNotFound, fmt.Errorf("chat not found"))
+	}
+
+	// Update it with the incoming params.
+	chat.Name = params.Name
+
+	verrs, err := tx.ValidateAndUpdate(chat, "id", "owner_id")
+	if err != nil {
+		return err
+	}
+
+	if verrs.HasAny() {
+		return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
+	}
+
+	return c.Render(http.StatusOK, r.JSON(chat))
 }

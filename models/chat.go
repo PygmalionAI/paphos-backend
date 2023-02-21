@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/gobuffalo/nulls"
+	"github.com/gobuffalo/pop/v6"
 	"github.com/gofrs/uuid"
 )
 
@@ -24,3 +25,16 @@ type Chat struct {
 }
 
 type Chats []Chat
+
+//
+// Scopes
+//
+
+// ChatsAccessibleByUser defines a scope to return only Chats that are
+// accessible by the user with the given UUID.
+func ChatsAccessibleByUser(userUuid uuid.UUID) pop.ScopeFunc {
+	return func(q *pop.Query) *pop.Query {
+		q = q.Where("(owner_id = ?)", userUuid)
+		return q
+	}
+}
