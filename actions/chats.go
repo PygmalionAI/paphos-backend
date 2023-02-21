@@ -97,11 +97,11 @@ func (v ChatsResource) Create(c buffalo.Context) error {
 	}
 
 	for _, characterID := range params.CharacterIDs {
-		// First, make sure this Character exists and is visible to this User
+		// First, make sure this Character exists and is accessible by this User.
 		character := &models.Character{}
 		query := tx.
 			Where("id = ?", characterID).
-			Scope(models.CharactersVisibleToUser(userUUID))
+			Scope(models.CharactersAccessibleByUser(userUUID))
 
 		exists, err := query.Exists(character)
 		if err != nil {
