@@ -11,7 +11,6 @@ import (
 // Test_ChatsResource_List_WhenLoggedOut asserts that the List action is
 // gated behind authentication.
 func (as *ActionSuite) Test_ChatsResource_List_WhenLoggedOut() {
-	as.LoadFixture("default")
 	res := as.JSON("/api/v1/chats").Get()
 
 	as.Equal(http.StatusUnauthorized, res.Code)
@@ -37,10 +36,8 @@ func (as *ActionSuite) Test_ChatsResource_List() {
 // Test_ChatsResource_Create_WhenLoggedOut asserts that the Create action
 // is gated behind authentication.
 func (as *ActionSuite) Test_ChatsResource_Create_WhenLoggedOut() {
-	as.LoadFixture("default")
-
-	chat := models.Chat{}
-	res := as.JSON("/api/v1/chats").Post(chat)
+	params := ChatCreateParams{}
+	res := as.JSON("/api/v1/chats").Post(params)
 
 	as.Equal(http.StatusUnauthorized, res.Code)
 }
@@ -97,4 +94,43 @@ func (as *ActionSuite) Test_ChatsResource_Create() {
 	// Assert that there's two new ChatParticipants (one is the current user, the
 	// other is the character passed in `params`).
 	as.Equal(2, newCount-originalCount)
+}
+
+// Test_ChatsResource_Update_WhenLoggedOut asserts that the Update action
+// is gated behind authentication.
+func (as *ActionSuite) Test_ChatsResource_Update_WhenLoggedOut() {
+	params := ChatUpdateParams{}
+	res := as.JSON("/api/v1/chats/xxx").Put(params)
+
+	as.Equal(http.StatusUnauthorized, res.Code)
+}
+
+// Test_ChatsResource_Update_WhenNoPermission asserts that the Update action
+// does not allow updating a chat you didn't create.
+func (as *ActionSuite) Test_ChatsResource_Update_WhenNoPermission() {
+	as.LoadFixture("default")
+
+	chat := &models.Chat{}
+	as.DB.First(chat)
+
+	params := ChatUpdateParams{Name: nulls.NewString("new chat name")}
+	res := as.JSONAsUser("user2@example.com", "/api/v1/chats/"+chat.ID.String()).Put(params)
+
+	as.Equal(http.StatusNotFound, res.Code)
+}
+
+// Test_ChatsResource_Update asserts that a User can update the name of a Chat
+// he created.
+func (as *ActionSuite) Test_ChatsResource_Update() {
+	as.LoadFixture("default")
+
+	chat := &models.Chat{}
+	as.DB.First(chat)
+
+	params := ChatUpdateParams{Name: nulls.NewString("new chat name")}
+	res := as.JSONAsUser("user@example.com", "/api/v1/chats/"+chat.ID.String()).Put(params)
+	as.Equal(http.StatusOK, res.Code)
+
+	as.DB.Find(chat, chat.ID)
+	as.Equal("new chat name", chat.Name.String)
 }
