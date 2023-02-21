@@ -46,17 +46,18 @@ var (
 // placed last in the route declarations, as it will prevent routes
 // declared after it to never be called.
 
-// @title                    Paphos API
-// @version                  1.0
-// @description              Base backend API to serve Pygamilion UI
-// @termsOfService           http://swagger.io/terms/
-
-// @license.name             AGPL 3.0
-// @license.url              https://www.gnu.org/licenses/agpl-3.0.en.html
-
-// @host                     localhost:3000
-// @BasePath                 /api/v1
-// @securityDefinitions.bearer BearerAuth
+//	@Title			Paphos
+//	@Version		1.0
+//	@Description	Core back-end API.
+//
+//	@license.name	AGPL 3.0
+//	@license.url	https://www.gnu.org/licenses/agpl-3.0.en.html
+//
+//	@Host			localhost:3000
+//	@BasePath		/api/v1
+//
+//	@Accept			json
+//	@Produce		json
 func App() *buffalo.App {
 	appOnce.Do(func() {
 		app = buffalo.New(buffalo.Options{
