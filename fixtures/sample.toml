@@ -44,6 +44,7 @@ name = "default"
       greeting = "Hello! I'm a public character."
       persona = "An example character marked with public visibility."
       visibility = "public"
+      contentious = false
 
       creator_id = "<%= uuidNamed("normal_user") %>"
 
@@ -57,6 +58,7 @@ name = "default"
       greeting = "Hello! I'm a private character."
       persona = "An example character marked with private visibility."
       visibility = "private"
+      contentious = false
 
       creator_id = "<%= uuidNamed("normal_user_2") %>"
 
@@ -70,8 +72,30 @@ name = "default"
       greeting = "Yo! I'm an unlisted character."
       persona = "An example character marked as unlisted."
       visibility = "unlisted"
+      contentious = false
 
       creator_id = "<%= uuidNamed("normal_user_2") %>"
+
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+  [[scenario.table]]
+    name = "chats"
+
+    [[scenario.table.row]]
+      id = "<%= uuidNamed("chat_by_normal_user") %>"
+      owner_id = "<%= uuidNamed("normal_user") %>"
+
+      name = "Chat by Normal User"
+
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "<%= uuidNamed("chat_by_normal_user_2") %>"
+      owner_id = "<%= uuidNamed("normal_user_2") %>"
+
+      name = "Chat by Normal User #2"
 
       created_at = "<%= now() %>"
       updated_at = "<%= now() %>"
