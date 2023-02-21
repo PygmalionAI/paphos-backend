@@ -131,3 +131,32 @@ func (v ChatsResource) Create(c buffalo.Context) error {
 	chat.Participants = participants
 	return c.Render(http.StatusCreated, r.JSON(chat))
 }
+
+// List returns all the Chats that the User who is making the HTTP request has
+// created.
+func (v ChatsResource) List(c buffalo.Context) error {
+	// Get the database transaction from the request context.
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return fmt.Errorf("no transaction found")
+	}
+
+	userUUID, err := shared.ExtractUserUUIDFromContext(c)
+	if err != nil {
+		return err
+	}
+
+	// Paginate results. Params "page" and "per_page" control pagination.
+	// Default values are "page=1" and "per_page=20".
+	query := tx.PaginateFromParams(c.Params())
+
+	chats := &models.Chats{}
+	if err := query.
+		EagerPreload().
+		Where("owner_id = ?", userUUID).
+		All(chats); err != nil {
+		return err
+	}
+
+	return c.Render(200, r.JSON(chats))
+}
