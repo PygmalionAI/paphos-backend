@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.6 (Homebrew)
--- Dumped by pg_dump version 14.6 (Homebrew)
+-- Dumped from database version 14.7 (Homebrew)
+-- Dumped by pg_dump version 14.7 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -42,6 +42,35 @@ CREATE TABLE public.characters (
 
 
 ALTER TABLE public.characters OWNER TO paphos;
+
+--
+-- Name: chat_participants; Type: TABLE; Schema: public; Owner: paphos
+--
+
+CREATE TABLE public.chat_participants (
+    id uuid NOT NULL,
+    user_id uuid,
+    character_id uuid,
+    chat_id uuid NOT NULL
+);
+
+
+ALTER TABLE public.chat_participants OWNER TO paphos;
+
+--
+-- Name: chats; Type: TABLE; Schema: public; Owner: paphos
+--
+
+CREATE TABLE public.chats (
+    id uuid NOT NULL,
+    owner_id uuid NOT NULL,
+    name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.chats OWNER TO paphos;
 
 --
 -- Name: schema_migration; Type: TABLE; Schema: public; Owner: paphos
@@ -83,6 +112,22 @@ ALTER TABLE ONLY public.characters
 
 
 --
+-- Name: chat_participants chat_participants_pkey; Type: CONSTRAINT; Schema: public; Owner: paphos
+--
+
+ALTER TABLE ONLY public.chat_participants
+    ADD CONSTRAINT chat_participants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chats chats_pkey; Type: CONSTRAINT; Schema: public; Owner: paphos
+--
+
+ALTER TABLE ONLY public.chats
+    ADD CONSTRAINT chats_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: paphos
 --
 
@@ -117,6 +162,38 @@ CREATE UNIQUE INDEX users_email_idx ON public.users USING btree (email);
 
 ALTER TABLE ONLY public.characters
     ADD CONSTRAINT characters_users_id_fk FOREIGN KEY (creator_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: chat_participants chat_participants_character_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: paphos
+--
+
+ALTER TABLE ONLY public.chat_participants
+    ADD CONSTRAINT chat_participants_character_id_fkey FOREIGN KEY (character_id) REFERENCES public.characters(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: chat_participants chat_participants_chat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: paphos
+--
+
+ALTER TABLE ONLY public.chat_participants
+    ADD CONSTRAINT chat_participants_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES public.chats(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: chat_participants chat_participants_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: paphos
+--
+
+ALTER TABLE ONLY public.chat_participants
+    ADD CONSTRAINT chat_participants_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: chats chats_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: paphos
+--
+
+ALTER TABLE ONLY public.chats
+    ADD CONSTRAINT chats_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --

@@ -1,0 +1,12 @@
+create_table("chat_participants") {
+  t.Column("id", "uuid", {primary: true})
+  t.Column("user_id", "uuid", {null: true})
+  t.Column("character_id", "uuid", {null: true})
+  t.Column("chat_id", "uuid", {})
+
+  t.ForeignKey("user_id", {"users": ["id"]}, {"on_delete": "RESTRICT", "on_update": "CASCADE"})
+  t.ForeignKey("character_id", {"characters": ["id"]}, {"on_delete": "RESTRICT", "on_update": "CASCADE"})
+  t.ForeignKey("chat_id", {"chats": ["id"]}, {"on_delete": "RESTRICT", "on_update": "CASCADE"})
+
+  t.DisableTimestamps()
+}

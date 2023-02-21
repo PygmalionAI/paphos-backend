@@ -1,0 +1,9 @@
+create_table("chats") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("owner_id", "uuid")
+	t.ForeignKey("owner_id", {"users": ["id"]}, {"on_delete": "RESTRICT", "on_update": "CASCADE"})
+
+	t.Column("name", "text", {null: true})
+
+	t.Timestamps()
+}
