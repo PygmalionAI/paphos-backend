@@ -8,6 +8,9 @@ targets:
   app:
     main: src/paphos.cr
 
+crystalline:
+  main: src/paphos.cr
+
 crystal: 1.7.2
 
 dependencies:
