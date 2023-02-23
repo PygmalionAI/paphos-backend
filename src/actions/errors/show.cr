@@ -20,6 +20,13 @@ class Errors::Show < Lucky::ErrorAction
       status: 400
   end
 
+  # For the current_user validation mixin.
+  def render(error : CheckCurrentUser::UnauthorizedError)
+    error_json \
+      message: "You're not authorized to perform that action.",
+      status: 401
+  end
+
   # Always keep this below other 'render' methods or it may override your
   # custom 'render' methods.
   def render(error : Lucky::RenderableError)
