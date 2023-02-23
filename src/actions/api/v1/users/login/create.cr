@@ -1,7 +1,7 @@
 class Api::V1::Users::Login::Create < ApiAction
   include Api::Auth::SkipRequireAuthToken
 
-  post "/api/v1/users/login" do
+  post "/users/login" do
     LogInUser.run(params) do |operation, user|
       if user
         json({token: UserToken.generate(user)})
