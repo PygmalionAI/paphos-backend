@@ -17,5 +17,7 @@ class Character < BaseModel
     column is_contentious : Bool
 
     belongs_to creator : User
+    has_many chat_participations : ChatParticipant
+    has_many chats : Chat, through: [:chat_participations, :chat]
   end
 end

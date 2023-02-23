@@ -7,6 +7,7 @@ class User < BaseModel
     column encrypted_password : String
 
     has_many characters : Character
+    has_many chats : Chat
   end
 
   def emailable : Carbon::Address
