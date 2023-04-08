@@ -2,7 +2,7 @@ FROM crystallang/crystal:1.4.1
 
 # Install utilities required to make this Dockerfile run
 RUN apt-get update && \
-    apt-get install -y wget gunzip
+    apt-get install -y wget gzip
 
 # Add the nodesource ppa to apt. Update this to change the nodejs version.
 RUN wget https://deb.nodesource.com/setup_16.x -O- | bash
@@ -23,7 +23,7 @@ RUN npm install -g yarn mix
 
 # Installs overmind, not needed if nox is the process manager.
 RUN wget https://github.com/DarthSim/overmind/releases/download/v2.2.2/overmind-v2.2.2-linux-amd64.gz && \
-    gunzip overmind-v2.2.2-linux-amd64.gz && \
+    gzip -d overmind-v2.2.2-linux-amd64.gz && \
     mv overmind-v2.2.2-linux-amd64 /usr/bin/overmind && \
     chmod +x /usr/bin/overmind
 
